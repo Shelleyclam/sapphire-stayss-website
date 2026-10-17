@@ -1,0 +1,10 @@
+# Settings for the free Netlify preview (the real site is hosted on GoDaddy).
+[build]
+  publish = "public"
+  command = ""
+
+# Keep the preview address out of Google so it doesn't compete with sapphirestayss.in
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
