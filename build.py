@@ -272,8 +272,6 @@ def hotel_jsonld():
         "currenciesAccepted": "INR",
         "checkinTime": "12:00",
         "checkoutTime": "12:00",
-        "petsAllowed": False,
-        "smokingAllowed": False,
         "numberOfRooms": sum(r["units"] for r in ROOMS),
         "amenityFeature": [
             {"@type": "LocationFeatureSpecification", "name": n, "value": True}
@@ -603,8 +601,6 @@ FAQ = [
      "Yes. Campfires, birthday or anniversary cakes and room decoration can be arranged if you ask at least a day ahead. Message us for prices."),
     ("Is there parking and Wi-Fi?",
      "Yes, both are free. Parking is inside the property."),
-    ("Are pets allowed?", "Sorry, pets are not allowed."),
-    ("Can I smoke?", "Smoking is not allowed."),
     ("What ID do I need?",
      "All adult guests need a valid government photo ID, such as an Aadhaar card, passport, driving licence or voter ID, at check-in."),
 ]
@@ -626,8 +622,6 @@ def policies_page(p):
     <div><dt>Breakfast</dt><dd>Included, {B['breakfast_time']}</dd></div>
     <div><dt>Children</dt><dd>{B['child_age'].capitalize()} years</dd></div>
     <div><dt>Extra mattress</dt><dd>{B['extra_mattress']} a night</dd></div>
-    <div><dt>Smoking</dt><dd>Not allowed</dd></div>
-    <div><dt>Pets</dt><dd>Not allowed</dd></div>
     <div><dt>ID</dt><dd>Photo ID for all adults</dd></div>
     <div><dt>Parking &amp; Wi-Fi</dt><dd>Free</dd></div>
   </dl>
@@ -707,8 +701,6 @@ def terms_body(p):
     <p>Children are guests {B['child_age']} years old; guests aged 6 and over count as adults. Each room has a maximum number of guests, shown on its page. Extra guests need an extra mattress at {B['extra_mattress']} per night, subject to space in the room.</p>
     <h2>House rules</h2>
     <ul>
-      <li>Smoking is not allowed.</li>
-      <li>Pets are not allowed.</li>
       <li>Please respect other guests and keep noise low at night.</li>
       <li>Guests are responsible for any damage to the room or property during their stay.</li>
     </ul>
