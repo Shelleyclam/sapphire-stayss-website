@@ -19,6 +19,14 @@ The website for Sapphire Stayss, Yelagiri: https://sapphirestayss.in
 Home, Rooms, one page per room (6), Gallery, Explore Yelagiri, Policies & FAQ, Contact,
 Terms, Privacy, Cancellation & Refund Policy, and a "page not found" page.
 
+## Viewing the site on your computer
+
+1. On the GitHub page, click the green **Code** button, then **Download ZIP**.
+2. Unzip it, open the `public` folder and double-click `index.html`. The site opens in your browser.
+
+Or, to view it at `http://localhost:8000` (needs Python): open a terminal in the `public` folder,
+run `python3 -m http.server 8000`, then open http://localhost:8000 in your browser.
+
 ## Making a change
 
 1. Edit `content/site.json` (for prices, phone numbers, room details and so on), or the page text in `build.py`.
@@ -49,8 +57,6 @@ to the cPanel hosting's IP address.
 
 ## Still to confirm with the owner
 
-- Breakfast time (the home page says 8:00).
-- The age limit for children.
 - Whether alcohol is allowed on the property.
 - The "14 hairpin bends", "highest point in Yelagiri" and boating lines.
 - Replacement photos: daytime exterior, garden, views, and the Swamymalai trek.

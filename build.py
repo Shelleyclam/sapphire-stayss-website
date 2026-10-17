@@ -385,8 +385,8 @@ def home(p):
     <div><h3>Climb Swamymalai</h3><p>The trek to Swamymalai, the highest point in Yelagiri, starts just 500 m behind the resort. Set off early for cool air and clear views, and be back in time for breakfast.</p><span class="tag">Starts behind the resort</span></div>
   </div>
   <div class="moment morning">
-    <time>08:00<small>Morning</small></time>
-    <div><h3>Breakfast is on us</h3><p>Soft idly, coconut chutney and sambar in the glass-walled dining room, with the garden outside. Complimentary for every guest.</p></div>
+    <time>08:30<small>Morning</small></time>
+    <div><h3>Breakfast is on us</h3><p>Soft idly, coconut chutney and sambar in the glass-walled dining room, with the garden outside. Served {B['breakfast_time']}, complimentary for every guest.</p></div>
     <div class="pair">
       {img(p, "home/dining", "Glass-walled dining room looking onto the garden", "(max-width: 920px) 60vw, 28vw")}
       {img(p, "home/breakfast-idly", "Idly with chutney and sambar on a banana leaf", "(max-width: 920px) 40vw, 18vw")}
@@ -484,7 +484,7 @@ def room_page(room):
       <dl class="spec">
         <div><dt>Size</dt><dd>{room['size_m2']} m² ({room['size_sqft']} sq ft)</dd></div>
         <div><dt>Beds</dt><dd>{e(room['beds'])}</dd></div>
-        <div><dt>Sleeps</dt><dd>Up to {e(sleeps(room))}</dd></div>
+        <div><dt>Sleeps</dt><dd>Up to {e(sleeps(room))} ({B['child_age']} years)</dd></div>
         <div><dt>View</dt><dd>{e(room['views'])}</dd></div>
         {units}
         <div><dt>Extra bed</dt><dd>Mattress {B['extra_mattress']} a night, breakfast included</dd></div>
@@ -586,7 +586,7 @@ FAQ = [
     ("What are the check-in and check-out times?",
      f"Check-in and check-out are both at {B['check_in']}. If you need an early check-in or late check-out, message us and we will try to arrange it."),
     ("Is breakfast included?",
-     "Yes. A South Indian breakfast is complimentary for every guest, including anyone on an extra mattress."),
+     f"Yes. A South Indian breakfast is complimentary for every guest, including anyone on an extra mattress. It is served {B['breakfast_time']}."),
     ("How do I pay?",
      f"For bookings made on this website, a {B['advance_percent']}% advance confirms your room. You pay the balance at check-in. Bookings made on Booking.com, Agoda or other sites follow the payment terms shown on that site."),
     ("What is the cancellation policy?",
@@ -595,6 +595,8 @@ FAQ = [
      f"Yes. An extra mattress costs {B['extra_mattress']} a night and includes breakfast for the extra guest."),
     ("How many people can stay in a room?",
      "Each double bed sleeps two adults and one child, and the single bed sleeps one. Every room page shows the maximum number of guests."),
+    ("Who counts as a child?",
+     f"Children {B['child_age']} years count as children. Guests aged 6 and over count as adults."),
     ("Do you serve lunch or dinner?",
      "We do not run a restaurant, but we can order lunch or dinner for you from a good local restaurant and serve it at the property. Let us know in advance."),
     ("Can you arrange a campfire, cake or decoration?",
@@ -621,11 +623,13 @@ def policies_page(p):
     <div><dt>Check-out</dt><dd>{B['check_out']}</dd></div>
     <div><dt>Advance</dt><dd>{B['advance_percent']}% to confirm</dd></div>
     <div><dt>Cancellation</dt><dd>Free up to {B['free_cancellation_days']} days before</dd></div>
-    <div><dt>Breakfast</dt><dd>Included</dd></div>
+    <div><dt>Breakfast</dt><dd>Included, {B['breakfast_time']}</dd></div>
+    <div><dt>Children</dt><dd>{B['child_age'].capitalize()} years</dd></div>
     <div><dt>Extra mattress</dt><dd>{B['extra_mattress']} a night</dd></div>
     <div><dt>Smoking</dt><dd>Not allowed</dd></div>
     <div><dt>Pets</dt><dd>Not allowed</dd></div>
     <div><dt>ID</dt><dd>Photo ID for all adults</dd></div>
+    <div><dt>Parking &amp; Wi-Fi</dt><dd>Free</dd></div>
   </dl>
 </section>
 <section class="wrap section tight-top">
@@ -700,7 +704,7 @@ def terms_body(p):
     <h2>Check-in and check-out</h2>
     <p>Check-in and check-out are at {B['check_in']}. All adult guests must show a valid government photo ID at check-in. We may refuse check-in if valid ID is not provided.</p>
     <h2>Occupancy</h2>
-    <p>Each room has a maximum number of guests, shown on its page. Extra guests need an extra mattress at {B['extra_mattress']} per night, subject to space in the room.</p>
+    <p>Children are guests {B['child_age']} years old; guests aged 6 and over count as adults. Each room has a maximum number of guests, shown on its page. Extra guests need an extra mattress at {B['extra_mattress']} per night, subject to space in the room.</p>
     <h2>House rules</h2>
     <ul>
       <li>Smoking is not allowed.</li>
