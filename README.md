@@ -57,6 +57,5 @@ to the cPanel hosting's IP address.
 
 ## Still to confirm with the owner
 
-- Whether alcohol is allowed on the property.
 - The "14 hairpin bends", "highest point in Yelagiri" and boating lines.
 - Replacement photos: daytime exterior, garden, views, and the Swamymalai trek.
