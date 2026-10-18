@@ -92,6 +92,7 @@ def book_href(p, room=None):
 
 NAV = [
     ("index.html", "Home", "home"),
+    ("about.html", "About", "about"),
     ("rooms.html", "Rooms", "rooms"),
     ("gallery.html", "Gallery", "gallery"),
     ("explore.html", "Explore Yelagiri", "explore"),
@@ -309,7 +310,7 @@ def home(p):
 <section class="wrap section intro" aria-label="About">
   <p class="intro-lead">Fourteen hairpin bends up from the plains, the air cools and the traffic fades. Evenings here end by the campfire.</p>
   <dl class="facts">
-    <div><dt>7 rooms</dt><dd>Six room types, including a separate villa with its own balcony</dd></div>
+    <div><dt>Foothills</dt><dd>At the foot of Swamymalai, with the trek starting 500 m away</dd></div>
     <div><dt>Breakfast</dt><dd>Complimentary South Indian breakfast for every guest</dd></div>
     <div><dt>AC</dt><dd>In every room, with TV, Wi-Fi, kettle and hot water</dd></div>
     <div><dt>12 noon</dt><dd>Check-in and check-out, so you get a full day</dd></div>
@@ -346,9 +347,9 @@ def home(p):
 </section>
 
 <section class="wrap section tight-top" id="day" aria-labelledby="day-title">
-  <span class="label">Your stay</span>
+  <span class="label">Ideas for your stay</span>
   <h2 class="big" id="day-title">Noon to noon</h2>
-  <p class="lead">Check-in and check-out are both at 12 noon, so even one night gives you a full afternoon, evening and morning in the hills.</p>
+  <p class="lead">Check-in and check-out are both at 12 noon, so even one night gives you a full afternoon, evening and morning in the hills. Here's what your day could look like. These are only suggestions; spend it however you like. Anything marked "On request" is something we can arrange for you.</p>
   <div style="margin-top:clamp(24px, 3vw, 36px)">
   <div class="moment">
     <time>12:00<small>Arrive</small></time>
@@ -389,6 +390,18 @@ def home(p):
     <time>10:30<small>Before you leave</small></time>
     <div><h3>Chocolates and one last stop</h3><p>Pick up homemade chocolates at the Chocolate Factory and Selfie Panda, 1 km away, or visit the Murugan Temple at 1.5 km. Check-out is at 12 noon.</p></div>
   </div>
+  </div>
+</section>
+
+<section class="wrap section tight-top" aria-labelledby="about-title">
+  <div class="about-band">
+    {img(p, "property/garden-bench", "Garden bench under the trees at Sapphire Stayss", "(max-width: 920px) 100vw, 45vw")}
+    <div>
+      <span class="label">About us</span>
+      <h2 class="big" id="about-title">A small stay, looked after personally</h2>
+      <p class="lead">{e(ABOUT_SHORT)}</p>
+      <p style="margin-top:22px"><a class="link" href="{p}about.html">Our story</a></p>
+    </div>
   </div>
 </section>
 
@@ -527,58 +540,116 @@ def maps_search(name):
     return "https://www.google.com/maps/search/?api=1&query=" + quote(name + ", Yelagiri")
 
 
-def place_list(items):
-    rows = []
-    for it in sorted(items, key=lambda x: x["km"]):
-        rows.append(f"""<li>
-        <span class="km">{km(it["km"])}</span>
-        <div>
-          <h3>{e(it["name"])}</h3>
-          <p>{e(it["about"])}</p>
-          <dl class="place-meta">
-            <div><dt>Best time</dt><dd>{e(it["best"])}</dd></div>
-            <div><dt>Where</dt><dd>{e(it["where"])} · <a href="{maps_search(it.get("maps", it["name"]))}" target="_blank" rel="noopener">Map</a></dd></div>
-          </dl>
-        </div>
-      </li>""")
-    return "\n      ".join(rows)
+ORIGIN = "Sapphire Stayss, Mangalam, Yelagiri"
+
+
+def place_card(it, cats):
+    from urllib.parse import quote
+    directions = ("https://www.google.com/maps/dir/?api=1&origin=" + quote(ORIGIN) +
+                  "&destination=" + quote(it["maps"]))
+    times = " ".join(it["times"])
+    return f"""<article class="place" data-cat="{it['cat']}" data-times="{times}">
+      <div class="place-top"><span class="place-km">{km(it['km'])}</span><span class="place-cat">{e(cats[it['cat']])}</span></div>
+      <h3>{e(it['name'])}</h3>
+      <p>{e(it['about'])}</p>
+      <dl class="place-facts">
+        <div><dt>Best time</dt><dd>{e(it['best'])}</dd></div>
+        <div><dt>Time needed</dt><dd>{e(it['duration'])}</dd></div>
+        <div><dt>Good for</dt><dd>{e(it['good_for'])}</dd></div>
+        <div><dt>Where</dt><dd>{e(it['where'])}</dd></div>
+      </dl>
+      <p class="place-tip"><b>Tip</b> {e(it['tip'])}</p>
+      <a class="btn place-btn" href="{directions}" target="_blank" rel="noopener">Get directions</a>
+    </article>"""
 
 
 def explore_page(p):
-    a = DATA["attractions"]
+    from urllib.parse import quote
+    P = DATA["places"]
+    cats = dict(P["categories"])
+    items = sorted(P["list"], key=lambda x: x["km"])
+    cards = "\n    ".join(place_card(it, cats) for it in items)
+    cat_btns = '<button type="button" data-place-cat="all" aria-pressed="true">All</button>' + "".join(
+        f'<button type="button" data-place-cat="{k}" aria-pressed="false">{e(v)}</button>' for k, v in P["categories"])
+    time_btns = '<button type="button" data-place-time="any" aria-pressed="true">Any time</button>' + "".join(
+        f'<button type="button" data-place-time="{k}" aria-pressed="false">{v}</button>'
+        for k, v in [("morning", "Morning"), ("afternoon", "Afternoon"), ("evening", "Evening")])
+    trek = next(it for it in items if it["name"].startswith("Swamymalai"))
+    trek_dir = ("https://www.google.com/maps/dir/?api=1&origin=" + quote(ORIGIN) + "&destination=" + quote(trek["maps"]))
     return f"""<section class="wrap page-head">
   <span class="label">Explore Yelagiri</span>
   <h1>Things to do nearby</h1>
-  <p>Most of Yelagiri's lakes, parks, temples and viewpoints are within 4 km of Sapphire Stayss. Distances are by road from our gate. Timings and tickets change, so check before you go, or ask us.</p>
+  <p>Most of Yelagiri's lakes, parks, temples and viewpoints are within 4 km of Sapphire Stayss. Pick what you are in the mood for, or the time of day, and we will show you what fits. Distances are by road from our gate.</p>
 </section>
 <section class="wrap section">
   <div class="highlight-box">
     <div>
       <span class="label">Right behind us</span>
       <h2>The Swamymalai trek</h2>
-      <p>Swamymalai is the highest peak in Yelagiri, at about 1,320 m. The trail starts in Mangalam, about 500 m behind the resort, and is roughly 6 km there and back. Most people take around 3 hours at an easy pace.</p>
-      <p style="margin-top:12px">The trek is managed by the Forest Department and needs a ticket, so ask us to help you book. Start early, carry water and wear good shoes. Avoid it in heavy rain.</p>
+      <p>{e(trek['about'])}</p>
+      <p style="margin-top:12px">{e(trek['tip'])}</p>
+      <div class="btn-row" style="margin-top:22px"><a class="btn" href="{trek_dir}" target="_blank" rel="noopener">Get directions</a><a class="btn btn-line" href="{wa('Hello Sapphire Stayss, please help me book the Swamymalai trek.')}" target="_blank" rel="noopener">Ask us to book</a></div>
     </div>
     {img(p, "home/swamymalai-view", "View over forested hills and the plains from the top of Swamymalai", "(max-width: 920px) 100vw, 45vw")}
   </div>
 </section>
-<section class="wrap section tight-top">
-  <h2 class="big">Things to do</h2>
-  <ul class="places">
-      {place_list(a['do'])}
-  </ul>
-</section>
-<section class="wrap section tight-top">
-  <h2 class="big">Places to visit</h2>
-  <ul class="places">
-      {place_list(a['visit'])}
-  </ul>
+<section class="wrap section tight-top" aria-labelledby="places-title">
+  <div class="split-head"><h2 class="big" id="places-title">Plan your outing</h2><p class="place-count" id="place-count" aria-live="polite">{len(items)} places</p></div>
+  <div class="place-filters">
+    <div class="filters" role="group" aria-label="What are you in the mood for?">{cat_btns}</div>
+    <div class="filters" role="group" aria-label="Time of day">{time_btns}</div>
+  </div>
+  <div class="place-grid" id="place-grid">
+    {cards}
+  </div>
+  <p class="place-empty" id="place-empty" hidden>Nothing matches both choices. Try another time of day.</p>
+  <p class="small-print" style="margin-top:28px">Opening hours and ticket prices change during the year, so please check before you go. We are always happy to help you plan.</p>
 </section>
 <section class="wrap section tight-top">
   <div class="split-head">
     <div><h2 class="big">Getting here</h2><p class="lead">We are in Mangalam, Yelagiri. Open the map for directions from Chennai, Bengaluru or Jolarpettai.</p></div>
     <a class="btn" href="{e(B['maps_url'])}" target="_blank" rel="noopener">Open in Google Maps</a>
   </div>
+</section>"""
+
+
+# ---------------------------------------------------------------- About
+
+ABOUT_SHORT = ("Sapphire Stayss is a small, quiet stay at the foot of Swamymalai. With only a handful of rooms "
+               "and a villa around the garden, we can look after every guest ourselves, from your first WhatsApp "
+               "message to the campfire on your last night.")
+
+
+def about_page(p):
+    rv = DATA["reviews"][0]
+    return f"""<section class="wrap page-head">
+  <span class="label">About us</span>
+  <h1>A small stay, looked after personally</h1>
+  <p>{e(ABOUT_SHORT)}</p>
+</section>
+<section class="wrap section">
+  <div class="about-band">
+    {img(p, "home/evening-exterior", "Sapphire Stayss lit up in the evening", "(max-width: 920px) 100vw, 45vw", lazy=False)}
+    <div class="prose">
+      <h2>Our place</h2>
+      <p>Sapphire Stayss sits in Mangalam, on the quieter side of Yelagiri, a few kilometres from the busy lake area. Mornings start with birdsong, and the Swamymalai trail begins almost at our gate.</p>
+      <p>We keep it small on purpose: a garden with swings and shady benches, clean and comfortable rooms, a good South Indian breakfast, and people who are there when you need something.</p>
+    </div>
+  </div>
+</section>
+<section class="wrap section tight-top">
+  <h2 class="big" style="margin-bottom:24px">What we care about</h2>
+  <div class="values">
+    <div><h3>Clean, comfortable rooms</h3><p>Fresh linen, spotless bathrooms and hot water, every stay. It is the thing our guests mention most.</p></div>
+    <div><h3>Help when you need it</h3><p>Dinner ordered in, a campfire in the garden, a cake for a birthday, directions to the trek. Just ask us.</p></div>
+    <div><h3>A quiet place to rest</h3><p>No crowds and no loud music. Just the hills, the garden and time to slow down.</p></div>
+  </div>
+</section>
+<section class="wrap section tight-top reviews">
+  <span class="label">In our guests' words</span>
+  <p class="quote">“{e(rv['quote'])}”</p>
+  <p class="quote-by">{e(rv['name'])} · {e(rv['source'])}</p>
+  <div class="btn-row" style="justify-content:center;margin-top:30px"><a class="btn" href="{book_href(p)}">Plan your stay</a><a class="btn btn-line" href="{p}rooms.html">See the rooms</a></div>
 </section>"""
 
 
@@ -774,6 +845,9 @@ def main():
     built.append(page("index.html", "Sapphire Stayss | Resort in Yelagiri Hills with Breakfast",
                       "A quiet garden resort in Mangalam, Yelagiri. Air-conditioned rooms and a private villa from ₹2,350 a night, complimentary breakfast, campfire on request.",
                       home, "home", jsonld=hotel_jsonld()))
+    built.append(page("about.html", "About Us | Sapphire Stayss, Yelagiri",
+                      "Sapphire Stayss is a small, quiet stay at the foot of Swamymalai in Mangalam, Yelagiri, looked after personally.",
+                      about_page, "about", image="home/evening-exterior"))
     built.append(page("rooms.html", "Rooms & Prices | Sapphire Stayss, Yelagiri",
                       "Six room types at Sapphire Stayss, Yelagiri, from ₹2,350 to ₹5,050 a night with breakfast. Family rooms, a private villa and mountain-view doubles.",
                       rooms_page, "rooms", image=ROOMS[0]["photos"][0][0]))
@@ -789,7 +863,7 @@ def main():
                       "Photos of the garden, rooms, villa, dining room and evenings at Sapphire Stayss in Yelagiri.",
                       gallery_page, "gallery", lightbox=True, image="home/evening-exterior"))
     built.append(page("explore.html", "Things to Do in Yelagiri Near Sapphire Stayss",
-                      "Swamymalai trek starts 500 m behind Sapphire Stayss. Boat House, Nature Park fountain show, adventure parks, temples and viewpoints within 4 km.",
+                      "Things to do near Sapphire Stayss, Yelagiri: the Swamymalai trek 500 m away, Punganoor Lake, the Nature Park fountain show, bird parks, adventure parks, temples and viewpoints, with best times and directions.",
                       explore_page, "explore"))
     built.append(page("policies.html", "Policies & FAQ | Sapphire Stayss, Yelagiri",
                       "Check-in and check-out at 12 noon, 50% advance, free cancellation up to 3 days before arrival, breakfast included.",

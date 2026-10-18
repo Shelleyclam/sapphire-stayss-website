@@ -75,7 +75,7 @@
   }
 
   // Gallery filters
-  var filters = document.querySelectorAll('.filters button');
+  var filters = document.querySelectorAll('.filters [data-filter]');
   filters.forEach(function (btn) {
     btn.addEventListener('click', function () {
       var cat = btn.getAttribute('data-filter');
@@ -164,5 +164,36 @@
       if (f.message.value) lines.push('', f.message.value);
       window.open(whatsappLink(lines.join('\n')), '_blank', 'noopener');
     });
+  }
+  // Explore: filter places by category and time of day
+  var placeGrid = document.getElementById('place-grid');
+  if (placeGrid) {
+    var cat = 'all';
+    var time = 'any';
+    var count = document.getElementById('place-count');
+    var empty = document.getElementById('place-empty');
+    var apply = function () {
+      var shown = 0;
+      placeGrid.querySelectorAll('.place').forEach(function (card) {
+        var ok = (cat === 'all' || card.getAttribute('data-cat') === cat) &&
+                 (time === 'any' || card.getAttribute('data-times').split(' ').indexOf(time) !== -1);
+        card.hidden = !ok;
+        if (ok) shown++;
+      });
+      count.textContent = shown + (shown === 1 ? ' place' : ' places');
+      empty.hidden = shown !== 0;
+    };
+    var wire = function (attr, set) {
+      var btns = document.querySelectorAll('[' + attr + ']');
+      btns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          btns.forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+          set(btn.getAttribute(attr));
+          apply();
+        });
+      });
+    };
+    wire('data-place-cat', function (v) { cat = v; });
+    wire('data-place-time', function (v) { time = v; });
   }
 })();

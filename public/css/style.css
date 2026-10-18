@@ -48,8 +48,8 @@ a { color: inherit; }
 /* ---------- Header ---------- */
 .site-header { position: relative; z-index: 20; }
 .topbar { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-block: 18px; }
-.brand img { width: clamp(150px, 16vw, 190px); height: auto; display: block; }
-.nav { display: flex; align-items: center; gap: 30px; font: 400 12px/1 var(--font-body); letter-spacing: .2em; text-transform: uppercase; }
+.brand img { width: clamp(190px, 20vw, 250px); height: auto; display: block; }
+.nav { display: flex; align-items: center; gap: 24px; font: 400 12px/1 var(--font-body); letter-spacing: .2em; text-transform: uppercase; }
 .nav a { text-decoration: none; color: var(--ink-soft); }
 .nav a:hover, .nav a[aria-current="page"] { color: var(--ink); }
 .nav a[aria-current="page"] { border-bottom: 1px solid var(--ink); padding-bottom: 4px; }
@@ -266,7 +266,7 @@ a { color: inherit; }
 /* ---------- Footer ---------- */
 .site-footer { border-top: 1px solid var(--rule); color: var(--ink-soft); font-size: 15px; margin-top: clamp(24px, 4vw, 48px); }
 .foot { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 36px; padding-block: 56px 30px; }
-.foot img { width: 180px; height: auto; display: block; margin-bottom: 14px; }
+.foot img { width: 230px; height: auto; display: block; margin-bottom: 14px; }
 .foot h2 { font-size: 20px; color: var(--ink); margin-bottom: 12px; }
 .foot ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
 .foot a { text-decoration: none; }
@@ -281,13 +281,15 @@ a { color: inherit; }
   .room-card:hover img { transform: scale(1.04); }
 }
 
-@media (max-width: 920px) {
+@media (max-width: 1100px) {
   .menu-btn { display: block; }
   .nav { display: none; position: absolute; left: 0; right: 0; top: 100%; background: var(--paper); border-bottom: 1px solid var(--rule); flex-direction: column; align-items: stretch; gap: 0; padding: 4px max(var(--gutter), env(safe-area-inset-right, 0px)) 18px max(var(--gutter), env(safe-area-inset-left, 0px)); }
   .nav.open { display: flex; }
   .nav a { padding-block: 16px; border-bottom: 1px solid var(--rule); font-size: 13px; }
   .nav a[aria-current="page"] { padding-bottom: 16px; }
   .nav .btn { margin-top: 16px; padding-block: 15px; }
+}
+@media (max-width: 920px) {
   .hero-text, .intro, .where, .room-detail, .explore-cols, .contact-grid, .highlight-box { grid-template-columns: 1fr; }
   .hero-photo img { aspect-ratio: 4 / 3; }
   .booking { grid-template-columns: 1fr 1fr; }
@@ -317,3 +319,38 @@ a { color: inherit; }
   .spec div { grid-template-columns: 100px 1fr; }
   .places li { grid-template-columns: 1fr; gap: 2px; }
 }
+
+/* ---------- About ---------- */
+.about-band { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(28px, 5vw, 64px); align-items: center; }
+.about-band > * { min-width: 0; }
+.about-band img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+.values { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
+.values div { padding-top: 18px; border-top: 1px solid var(--rule); }
+.values h3 { font-size: 22px; margin-bottom: 8px; }
+.values p { color: var(--ink-soft); }
+
+/* ---------- Explore cards ---------- */
+.place-filters { display: grid; gap: 4px; margin-bottom: 8px; }
+.place-filters .filters { margin-bottom: 10px; }
+.place-count { color: var(--ink-soft); font-size: 14px; letter-spacing: .06em; }
+.place-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.place { display: flex; flex-direction: column; gap: 12px; background: var(--paper); border: 1px solid var(--rule); padding: 24px; min-width: 0; transition: border-color .2s ease, box-shadow .2s ease; }
+.place:hover { border-color: var(--ink-soft); box-shadow: 0 10px 28px rgba(30, 42, 85, .08); }
+.place-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.place-km { font-family: var(--font-display); font-size: 30px; line-height: 1; font-variant-numeric: tabular-nums; }
+.place-cat { font: 400 11px/1.4 var(--font-body); letter-spacing: .2em; text-transform: uppercase; color: var(--earth); text-align: right; }
+.place h3 { font-size: 23px; line-height: 1.2; }
+.place > p { color: var(--ink-soft); font-size: 15.5px; }
+.place-facts { margin: 0; display: grid; gap: 0; font-size: 14.5px; }
+.place-facts div { display: grid; grid-template-columns: 104px 1fr; gap: 10px; padding-block: 8px; border-top: 1px solid var(--rule); }
+.place-facts dt { font: 400 11px/1.9 var(--font-body); letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
+.place-facts dd { margin: 0; }
+.place-tip { background: var(--wash); padding: 12px 14px; font-size: 14.5px; color: var(--ink); }
+.place-tip b { font-weight: 500; color: var(--earth); margin-right: 6px; letter-spacing: .04em; }
+.place-btn { margin-top: auto; align-self: stretch; }
+.place[hidden] { display: none; }
+.place-empty { color: var(--ink-soft); padding-block: 24px; }
+
+@media (max-width: 1080px) { .place-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 920px) { .about-band, .values { grid-template-columns: 1fr; } }
+@media (max-width: 620px) { .place-grid { grid-template-columns: 1fr; } .place { padding: 20px; } }
