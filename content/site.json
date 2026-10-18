@@ -105,6 +105,10 @@
       ],
       "photos": [
         [
+          "rooms/deluxe-family-suite-5",
+          "Family Suite with both beds and curtains"
+        ],
+        [
           "rooms/deluxe-family-suite-1",
           "Family Suite bed with grey headboard and patterned wall"
         ],
@@ -119,10 +123,6 @@
         [
           "rooms/deluxe-family-suite-4",
           "Family Suite bed with bedside table"
-        ],
-        [
-          "rooms/deluxe-family-suite-5",
-          "Family Suite with both beds and curtains"
         ],
         [
           "rooms/deluxe-family-suite-6",
@@ -156,12 +156,12 @@
       ],
       "photos": [
         [
-          "rooms/family-room-garden-view-1",
-          "Family Room with two beds and grey headboards"
-        ],
-        [
           "rooms/family-room-garden-view-2",
           "Family Room bed with patterned feature wall"
+        ],
+        [
+          "rooms/family-room-garden-view-1",
+          "Family Room with two beds and grey headboards"
         ],
         [
           "rooms/family-room-garden-view-3",
@@ -203,16 +203,16 @@
       ],
       "photos": [
         [
+          "rooms/double-or-twin-room-3",
+          "Double or Twin Room with green armchair"
+        ],
+        [
           "rooms/double-or-twin-room-1",
           "Double or Twin Room with armchair and bed"
         ],
         [
           "rooms/double-or-twin-room-2",
           "Double or Twin Room with curtained window"
-        ],
-        [
-          "rooms/double-or-twin-room-3",
-          "Double or Twin Room with green armchair"
         ],
         [
           "rooms/double-or-twin-room-4",
@@ -445,17 +445,17 @@
     ],
     [
       "rooms",
-      "rooms/deluxe-family-suite-1",
+      "rooms/deluxe-family-suite-5",
       "Deluxe Family Suite"
     ],
     [
       "rooms",
-      "rooms/family-room-garden-view-1",
+      "rooms/family-room-garden-view-2",
       "Family Room with Garden View"
     ],
     [
       "rooms",
-      "rooms/double-or-twin-room-1",
+      "rooms/double-or-twin-room-3",
       "Double or Twin Room"
     ],
     [

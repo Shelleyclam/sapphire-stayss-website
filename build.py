@@ -520,22 +520,42 @@ def room_page(room):
 
 # ---------------------------------------------------------------- Gallery
 
+def orientation(name):
+    """'w' for wide photos, 't' for tall ones, '' for roughly square (needs Pillow)."""
+    if not Image:
+        return ""
+    with Image.open(os.path.join(OUT, "img", name + "-sm.webp")) as im:
+        r = im.width / im.height
+    return "w" if r > 1.2 else "t" if r < 0.83 else ""
+
+
 def gallery_page(p):
-    cats = [("all", "All"), ("property", "Garden & property"), ("rooms", "Rooms"), ("dining", "Dining"), ("evenings", "Evenings")]
-    btns = "".join(f'<button type="button" data-filter="{k}" aria-pressed="{"true" if k == "all" else "false"}">{v}</button>' for k, v in cats)
-    figs = "\n    ".join(
-        f'<figure data-cat="{cat}"><button type="button" data-lightbox="gallery" data-full="{p}img/{name}.webp">{img(p, name, cap, "(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 400px")}</button><figcaption>{e(cap)}</figcaption></figure>'
-        for cat, name, cap in DATA["gallery"]
-    )
+    cats = [("property", "Garden & property"), ("rooms", "Rooms"), ("dining", "Dining"), ("evenings", "Evenings")]
+    counts = {k: sum(1 for c, _, _ in DATA["gallery"] if c == k) for k, _ in cats}
+    btns = f'<button type="button" data-filter="all" aria-pressed="true">All <span>{len(DATA["gallery"])}</span></button>' + "".join(
+        f'<button type="button" data-filter="{k}" aria-pressed="false">{v} <span>{counts[k]}</span></button>' for k, v in cats)
+    seen = set()
+    figs = []
+    for cat, name, cap in DATA["gallery"]:
+        shape = "big" if cat not in seen else orientation(name)
+        seen.add(cat)
+        figs.append(
+            f'<figure class="{shape}" data-cat="{cat}"><button type="button" data-lightbox="gallery" data-full="{p}img/{name}.webp" aria-label="View larger: {e(cap)}">'
+            f'{img(p, name, cap, "(max-width: 700px) 50vw, 33vw")}</button><figcaption>{e(cap)}</figcaption></figure>')
+    figs = "\n    ".join(figs)
     return f"""<section class="wrap page-head">
   <span class="label">Gallery</span>
   <h1>Around the property</h1>
   <p>The garden, the rooms, breakfast and our evenings. Tap any photo to see it larger.</p>
 </section>
 <section class="wrap section">
-  <div class="filters" role="group" aria-label="Filter photos">{btns}</div>
-  <div class="masonry">
+  <div class="filters gallery-filters" role="group" aria-label="Filter photos">{btns}</div>
+  <div class="bento">
     {figs}
+  </div>
+  <div class="gallery-cta">
+    <p>Like what you see?</p>
+    <div class="btn-row"><a class="btn" href="{book_href(p)}">Check availability</a><a class="btn btn-line" href="{p}rooms.html">See the rooms</a></div>
   </div>
 </section>"""
 
