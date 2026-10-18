@@ -34,7 +34,7 @@
         <a href="explore.html">Explore Yelagiri</a>
         <a href="policies.html">Policies & FAQ</a>
         <a href="contact.html" aria-current="page">Contact</a>
-        <a class="btn" href="https://wa.me/919363941162" data-book>Book now</a>
+        <a class="btn" href="contact.html#enquiry">Book now</a>
     </nav>
   </div>
 </header>
@@ -57,14 +57,23 @@
       <p style="margin-top:22px"><a class="btn btn-line" href="https://maps.app.goo.gl/gnNPDMo8Wk9LJBo39" target="_blank" rel="noopener">Get directions</a></p>
     </div>
     <div>
-      <h2 class="big" style="margin-bottom:8px">Send an enquiry</h2>
-      <p class="lead" style="margin-bottom:22px">Fill this in and tap send. It opens WhatsApp with your message ready to go.</p>
+      <h2 class="big" id="enquiry" style="margin-bottom:8px">Book or enquire</h2>
+      <p class="lead" style="margin-bottom:22px">Tell us your dates and we will confirm availability. Tapping send opens WhatsApp with your details ready to go.</p>
       <form class="form" id="enquiry-form">
         <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" required autocomplete="name"></div>
-        <div class="field"><label for="f-phone">Phone (optional)</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
-        <div class="field"><label for="f-dates">Dates (optional)</label><input id="f-dates" name="dates" placeholder="e.g. 14–16 Nov"></div>
-        <div class="field"><label for="f-guests">Guests (optional)</label><input id="f-guests" name="guests" placeholder="e.g. 2 adults, 1 child"></div>
-        <div class="field full"><label for="f-msg">Message</label><textarea id="f-msg" name="message" required></textarea></div>
+        <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel"></div>
+        <div class="field"><label for="f-in">Check-in</label><input id="f-in" name="checkin" type="date" required></div>
+        <div class="field"><label for="f-out">Check-out</label><input id="f-out" name="checkout" type="date" required></div>
+        <div class="field">
+          <label for="f-guests">Guests</label>
+          <div class="stepper">
+            <button type="button" data-step="-1" aria-label="One guest fewer">−</button>
+            <input id="f-guests" name="guests" type="number" min="1" max="20" value="2" inputmode="numeric">
+            <button type="button" data-step="1" aria-label="One guest more">+</button>
+          </div>
+        </div>
+        <div class="field"><label for="f-room">Room</label><select id="f-room" name="room"><option value="">Any room</option><option value="deluxe-villa">Deluxe Villa</option><option value="deluxe-family-suite">Deluxe Family Suite</option><option value="family-room-garden-view">Family Room with Garden View</option><option value="double-or-twin-room">Double or Twin Room with Mountain View</option><option value="double-room-mountain-view">Double Room with Mountain View</option><option value="king-room-mountain-view">King Room with Mountain View</option></select></div>
+        <div class="field full"><label for="f-msg">Message (optional)</label><textarea id="f-msg" name="message" placeholder="Anything we should know, such as a campfire or a birthday"></textarea></div>
         <div class="actions"><button class="btn" type="submit">Send on WhatsApp</button></div>
       </form>
     </div>

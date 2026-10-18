@@ -25,12 +25,10 @@
     "child_age": "under 6",
     "year": 2026
   },
-
   "booking": {
     "_note": "Paste the channel manager's booking page link here when it is ready. While it is empty, every Book button opens WhatsApp instead.",
     "url": ""
   },
-
   "rooms": [
     {
       "slug": "deluxe-villa",
@@ -46,16 +44,44 @@
       "price": 5050,
       "views": "Garden and mountain views",
       "summary": "A separate villa with its own living area, a three-seater sofa and a private balcony looking out over the garden and the hills.",
-      "features": ["Private balcony", "Living area with 3-seater sofa", "Garden and mountain views"],
+      "features": [
+        "Private balcony",
+        "Living area with 3-seater sofa",
+        "Garden and mountain views"
+      ],
       "photos": [
-        ["rooms/deluxe-villa-1", "Villa living area with sofa, rug and window"],
-        ["rooms/deluxe-villa-2", "Villa window with a view of the hills"],
-        ["rooms/deluxe-villa-3", "Villa bed with wooden headboard"],
-        ["rooms/deluxe-villa-4", "Villa bedroom with bed and seating area"],
-        ["rooms/deluxe-villa-5", "Villa bedroom with wall art above the bed"],
-        ["rooms/deluxe-villa-6", "The villa building with its red-tiled roof"],
-        ["rooms/deluxe-villa-7", "Outside stairs leading up to the villa"],
-        ["rooms/deluxe-villa-8", "View of the hills from the villa"]
+        [
+          "rooms/deluxe-villa-1",
+          "Villa living area with sofa, rug and window"
+        ],
+        [
+          "rooms/deluxe-villa-2",
+          "Villa window with a view of the hills"
+        ],
+        [
+          "rooms/deluxe-villa-3",
+          "Villa bed with wooden headboard"
+        ],
+        [
+          "rooms/deluxe-villa-4",
+          "Villa bedroom with bed and seating area"
+        ],
+        [
+          "rooms/deluxe-villa-5",
+          "Villa bedroom with wall art above the bed"
+        ],
+        [
+          "rooms/deluxe-villa-6",
+          "The villa building with its red-tiled roof"
+        ],
+        [
+          "rooms/deluxe-villa-7",
+          "Outside stairs leading up to the villa"
+        ],
+        [
+          "rooms/deluxe-villa-8",
+          "View of the hills from the villa"
+        ]
       ]
     },
     {
@@ -72,15 +98,40 @@
       "price": 5050,
       "views": "Garden and courtyard views",
       "summary": "Our largest room, with two beds, tall windows and a portico, made for families who want space to spread out.",
-      "features": ["Portico", "Two beds", "Garden and courtyard views"],
+      "features": [
+        "Portico",
+        "Two beds",
+        "Garden and courtyard views"
+      ],
       "photos": [
-        ["rooms/deluxe-family-suite-1", "Family Suite bed with grey headboard and patterned wall"],
-        ["rooms/deluxe-family-suite-2", "Family Suite bed beside tall curtained windows"],
-        ["rooms/deluxe-family-suite-3", "Family Suite window with grey curtains"],
-        ["rooms/deluxe-family-suite-4", "Family Suite bed with bedside table"],
-        ["rooms/deluxe-family-suite-5", "Family Suite with both beds and curtains"],
-        ["rooms/deluxe-family-suite-6", "Family Suite second bed beside the wardrobe"],
-        ["rooms/deluxe-family-suite-7", "Family Suite showing two beds side by side"]
+        [
+          "rooms/deluxe-family-suite-1",
+          "Family Suite bed with grey headboard and patterned wall"
+        ],
+        [
+          "rooms/deluxe-family-suite-2",
+          "Family Suite bed beside tall curtained windows"
+        ],
+        [
+          "rooms/deluxe-family-suite-3",
+          "Family Suite window with grey curtains"
+        ],
+        [
+          "rooms/deluxe-family-suite-4",
+          "Family Suite bed with bedside table"
+        ],
+        [
+          "rooms/deluxe-family-suite-5",
+          "Family Suite with both beds and curtains"
+        ],
+        [
+          "rooms/deluxe-family-suite-6",
+          "Family Suite second bed beside the wardrobe"
+        ],
+        [
+          "rooms/deluxe-family-suite-7",
+          "Family Suite showing two beds side by side"
+        ]
       ]
     },
     {
@@ -98,14 +149,36 @@
       "price": 3950,
       "views": "Garden view",
       "summary": "Two beds, a three-seater sofa and a portico opening onto the garden. A comfortable choice for families and small groups.",
-      "features": ["Portico", "3-seater sofa", "Garden view"],
+      "features": [
+        "Portico",
+        "3-seater sofa",
+        "Garden view"
+      ],
       "photos": [
-        ["rooms/family-room-garden-view-1", "Family Room with two beds and grey headboards"],
-        ["rooms/family-room-garden-view-2", "Family Room bed with patterned feature wall"],
-        ["rooms/family-room-garden-view-3", "Family Room entrance door and potted plants"],
-        ["rooms/family-room-garden-view-4", "Family Room with wooden bed and window"],
-        ["rooms/family-room-garden-view-5", "Family Room bed with white linen"],
-        ["rooms/family-room-garden-view-6", "Family Room bed beside the window"]
+        [
+          "rooms/family-room-garden-view-1",
+          "Family Room with two beds and grey headboards"
+        ],
+        [
+          "rooms/family-room-garden-view-2",
+          "Family Room bed with patterned feature wall"
+        ],
+        [
+          "rooms/family-room-garden-view-3",
+          "Family Room entrance door and potted plants"
+        ],
+        [
+          "rooms/family-room-garden-view-4",
+          "Family Room with wooden bed and window"
+        ],
+        [
+          "rooms/family-room-garden-view-5",
+          "Family Room bed with white linen"
+        ],
+        [
+          "rooms/family-room-garden-view-6",
+          "Family Room bed beside the window"
+        ]
       ]
     },
     {
@@ -123,13 +196,32 @@
       "price": 2850,
       "views": "Mountain and garden views",
       "summary": "A large double plus a single bed, so three friends or a small family can share one room with a view of the hills.",
-      "features": ["Sleeps three adults", "Armchair", "Mountain view"],
+      "features": [
+        "Sleeps three adults",
+        "Armchair",
+        "Mountain view"
+      ],
       "photos": [
-        ["rooms/double-or-twin-room-1", "Double or Twin Room with armchair and bed"],
-        ["rooms/double-or-twin-room-2", "Double or Twin Room with curtained window"],
-        ["rooms/double-or-twin-room-3", "Double or Twin Room with green armchair"],
-        ["rooms/double-or-twin-room-4", "Double or Twin Room TV unit and kettle"],
-        ["rooms/double-or-twin-room-5", "Ensuite bathroom with washbasin and shower"]
+        [
+          "rooms/double-or-twin-room-1",
+          "Double or Twin Room with armchair and bed"
+        ],
+        [
+          "rooms/double-or-twin-room-2",
+          "Double or Twin Room with curtained window"
+        ],
+        [
+          "rooms/double-or-twin-room-3",
+          "Double or Twin Room with green armchair"
+        ],
+        [
+          "rooms/double-or-twin-room-4",
+          "Double or Twin Room TV unit and kettle"
+        ],
+        [
+          "rooms/double-or-twin-room-5",
+          "Ensuite bathroom with washbasin and shower"
+        ]
       ]
     },
     {
@@ -147,17 +239,48 @@
       "price": 2750,
       "views": "Mountain and garden views",
       "summary": "A bright room for couples, with an extra-large double bed, an armchair by the window and views of the hills.",
-      "features": ["Extra-large double bed", "Armchair by the window", "Mountain view"],
+      "features": [
+        "Extra-large double bed",
+        "Armchair by the window",
+        "Mountain view"
+      ],
       "photos": [
-        ["rooms/double-room-mountain-view-1", "Double Room bed with red cushions and grey curtains"],
-        ["rooms/double-room-mountain-view-2", "Double Room with bed, armchair and patterned wall"],
-        ["rooms/double-room-mountain-view-3", "Blue armchair by a window with trees outside"],
-        ["rooms/double-room-mountain-view-4", "Armchair by the window with balcony railing"],
-        ["rooms/double-room-mountain-view-5", "Double Room bed against patterned wallpaper"],
-        ["rooms/double-room-mountain-view-6", "Bed with bedside table and kettle"],
-        ["rooms/double-room-mountain-view-7", "Double Room with bed and green armchair"],
-        ["rooms/double-room-mountain-view-8", "TV unit with kettle and water bottles"],
-        ["rooms/double-room-mountain-view-9", "Double Room with armchair and TV unit"]
+        [
+          "rooms/double-room-mountain-view-1",
+          "Double Room bed with red cushions and grey curtains"
+        ],
+        [
+          "rooms/double-room-mountain-view-2",
+          "Double Room with bed, armchair and patterned wall"
+        ],
+        [
+          "rooms/double-room-mountain-view-3",
+          "Blue armchair by a window with trees outside"
+        ],
+        [
+          "rooms/double-room-mountain-view-4",
+          "Armchair by the window with balcony railing"
+        ],
+        [
+          "rooms/double-room-mountain-view-5",
+          "Double Room bed against patterned wallpaper"
+        ],
+        [
+          "rooms/double-room-mountain-view-6",
+          "Bed with bedside table and kettle"
+        ],
+        [
+          "rooms/double-room-mountain-view-7",
+          "Double Room with bed and green armchair"
+        ],
+        [
+          "rooms/double-room-mountain-view-8",
+          "TV unit with kettle and water bottles"
+        ],
+        [
+          "rooms/double-room-mountain-view-9",
+          "Double Room with armchair and TV unit"
+        ]
       ]
     },
     {
@@ -175,15 +298,27 @@
       "price": 2350,
       "views": "Mountain and garden views",
       "summary": "A cosy room with an extra-large double bed and an armchair. Our best value for couples.",
-      "features": ["Extra-large double bed", "Armchair", "Mountain view"],
+      "features": [
+        "Extra-large double bed",
+        "Armchair",
+        "Mountain view"
+      ],
       "photos": [
-        ["rooms/king-room-mountain-view-1", "King Room with bed, desk and armchair"],
-        ["rooms/king-room-mountain-view-2", "King Room window with long curtains"],
-        ["rooms/king-room-mountain-view-3", "King Room bed with grey headboard"]
+        [
+          "rooms/king-room-mountain-view-1",
+          "King Room with bed, desk and armchair"
+        ],
+        [
+          "rooms/king-room-mountain-view-2",
+          "King Room window with long curtains"
+        ],
+        [
+          "rooms/king-room-mountain-view-3",
+          "King Room bed with grey headboard"
+        ]
       ]
     }
   ],
-
   "room_amenities": [
     "Air-conditioning",
     "Complimentary breakfast",
@@ -195,78 +330,363 @@
     "Terrace access",
     "Free parking"
   ],
-
   "attractions": {
+    "_note": "Each place: km from our gate, about (short description), best (time of day), where (area). 'maps' is optional: the search words for Google Maps.",
     "do": [
-      {"name": "Swamymalai trek", "km": 0.5, "note": "The trail starts about 500 m behind the resort and climbs to Swamymalai, the highest point in Yelagiri. Best done early in the morning."},
-      {"name": "Selfie Panda & Chocolate Factory", "km": 1, "note": "Photo spots and homemade chocolates. A good stop with children."},
-      {"name": "Aqua Fountain & Birds Park", "km": 1.5, "note": ""},
-      {"name": "Yelagiri Birds Park", "km": 1.5, "note": ""},
-      {"name": "Fundura Park", "km": 2, "note": "Play park for children."},
-      {"name": "Cloud Forest Entertainment Park", "km": 3, "note": ""},
-      {"name": "Boat House & park, Punganoor Lake", "km": 3.5, "note": "Boating on the lake."},
-      {"name": "Lake Zone Adventure Park", "km": 3.5, "note": ""},
-      {"name": "Thrill Valley Adventure Park", "km": 3.5, "note": ""},
-      {"name": "Wild Waves Theme Park", "km": 3.5, "note": ""},
-      {"name": "Mountain View Adventure Park", "km": 4, "note": ""}
+      {
+        "name": "Swamymalai trek",
+        "km": 0.5,
+        "where": "Mangalam, behind the resort",
+        "maps": "Swamimalai Hills",
+        "best": "Early morning, 6 to 9 AM",
+        "about": "The highest peak in Yelagiri, at about 1,320 m. Roughly 6 km there and back, around 3 hours at an easy pace. Managed by the Forest Department with a ticket, so ask us to help you book."
+      },
+      {
+        "name": "Selfie Panda & Chocolate Factory",
+        "km": 1,
+        "where": "Yelagiri",
+        "best": "Any time of day",
+        "about": "Themed photo spots and a shop selling homemade chocolates. A quick, fun stop with children, and a good place to pick up something sweet to take home."
+      },
+      {
+        "name": "Aqua Fountain & Birds Park",
+        "km": 1.5,
+        "where": "Yelagiri",
+        "best": "Morning, when the birds are most active",
+        "about": "A small park with bird enclosures and fountains. Easy walking, so it suits young children and older family members."
+      },
+      {
+        "name": "Yelagiri Birds Park",
+        "km": 1.5,
+        "where": "Yelagiri",
+        "best": "Morning, when the birds are most active",
+        "about": "Colourful birds in large enclosures that you can walk past and watch up close. A gentle outing for families."
+      },
+      {
+        "name": "Fundera Park",
+        "km": 2,
+        "where": "Yelagiri",
+        "maps": "Fundera Park",
+        "best": "Morning",
+        "about": "A bird park with more than 300 exotic birds in walk-in aviaries. You can see them up close and, at set times, feed them. One of the most visited places in Yelagiri."
+      },
+      {
+        "name": "Cloud Forest Entertainment Park",
+        "km": 3,
+        "where": "Mettukaniyur village",
+        "best": "Morning to early afternoon; allow 2 to 3 hours",
+        "about": "Butterfly and flower gardens, a petting area, a fish spa, a large play zone, a short bamboo-forest walk and a suspension bridge with hill views, all on one ticket."
+      },
+      {
+        "name": "Boat House, Punganoor Lake",
+        "km": 3.5,
+        "where": "Punganoor Lake, centre of Yelagiri",
+        "maps": "Punganoor Lake Boat House",
+        "best": "Early morning, or after 4 PM when the sun is softer",
+        "about": "Yelagiri's main lake, with rowing and pedal boats and a fountain in the middle. Weekends get busy, and some counters take cash only, so carry some."
+      },
+      {
+        "name": "Lake Zone Adventure Park",
+        "km": 3.5,
+        "where": "Yelagiri",
+        "best": "Afternoon",
+        "about": "Outdoor adventure activities and games for children and adults. Combine it with boating at Punganoor Lake, which is nearby."
+      },
+      {
+        "name": "Thrill Valley Adventure Park",
+        "km": 3.5,
+        "where": "Yelagiri",
+        "best": "Afternoon",
+        "about": "An adventure park with outdoor rides and activities for groups of friends and families with older children."
+      },
+      {
+        "name": "Wild Waves Theme Park",
+        "km": 3.5,
+        "where": "Yelagiri",
+        "best": "Late morning to afternoon",
+        "about": "A theme park with rides and games, popular with families on weekends."
+      },
+      {
+        "name": "Mountain View Adventure Park",
+        "km": 4,
+        "where": "Kottur village",
+        "best": "Afternoon, 3 to 6 PM",
+        "about": "Zipline, giant swing, archery, target shooting and net cricket, sold as packages of 1 to 2.5 hours. Good for groups and teenagers."
+      }
     ],
     "visit": [
-      {"name": "Sivan Temple", "km": 1, "note": ""},
-      {"name": "Murugan (Velan) Temple", "km": 1.5, "note": ""},
-      {"name": "Nilavoor View Point", "km": 2.5, "note": "Wide views over the hills and valley."},
-      {"name": "Perumal Temple", "km": 3.5, "note": ""},
-      {"name": "Nature Park", "km": 3.5, "note": "Opposite the Boat House. Musical fountain show every day at 7 PM."},
-      {"name": "AR Thanga Kottai", "km": 4, "note": ""},
-      {"name": "Jalagamparai Waterfalls", "km": 40, "note": "A half-day trip by car."}
+      {
+        "name": "Sivan Temple",
+        "km": 1,
+        "where": "Yelagiri",
+        "best": "Early morning or evening",
+        "about": "A quiet local temple to Lord Shiva, close to the resort. A peaceful start or end to the day."
+      },
+      {
+        "name": "Murugan (Velavan) Temple",
+        "km": 1.5,
+        "where": "Hilltop, Yelagiri",
+        "maps": "Velavan Temple",
+        "best": "Morning or evening; closed for a few hours around midday",
+        "about": "A hilltop temple to Lord Murugan, reached by a flight of steps, with a large statue at the entrance and wide views over the hills."
+      },
+      {
+        "name": "Nilavoor View Point",
+        "km": 2.5,
+        "where": "Nilavoor village",
+        "maps": "Nilavoor View Point",
+        "best": "Late afternoon, before 6:30 PM",
+        "about": "A cliff-edge viewpoint with sweeping views over the valley and the plains below. Free to visit and much quieter than the lake."
+      },
+      {
+        "name": "Perumal Temple",
+        "km": 3.5,
+        "where": "Yelagiri",
+        "best": "Early morning or evening",
+        "about": "A local temple to Lord Vishnu, visited by families from the villages around Yelagiri."
+      },
+      {
+        "name": "Nature Park",
+        "km": 3.5,
+        "where": "Next to the Boat House, Punganoor Lake",
+        "maps": "Yelagiri Nature Park",
+        "best": "From 5 PM, staying for the 7 PM fountain show",
+        "about": "Landscaped gardens, a greenhouse and walking paths beside the lake. The musical fountain show runs every evening at 7 PM and has its own ticket."
+      },
+      {
+        "name": "AR Thanga Kottai",
+        "km": 4,
+        "where": "Yelagiri",
+        "best": "Any time of day",
+        "about": "A popular stop on the Yelagiri sightseeing route."
+      },
+      {
+        "name": "Jalagamparai Waterfalls",
+        "km": 40,
+        "where": "Below the Yelagiri hills, about 40 km by road",
+        "maps": "Jalagamparai Falls",
+        "best": "Morning; fullest from October to February",
+        "about": "A waterfall in the forest below Yelagiri, best after the monsoon. Plan it as a half-day trip, carry water and wear shoes with a good grip."
+      }
     ]
   },
-
   "reviews": [
-    {"quote": "10/10 for the hospitality. Feels like home for friends and family.", "name": "Vasy", "source": "Google"},
-    {"quote": "We booked a two-bedroom villa which was very comfortable and well-maintained. The bathrooms were spotless clean.", "name": "Gunaseelan", "source": "Google"},
-    {"quote": "Courteous staff. We had ordered dinner, birthday cake and camp fire through them. Enjoyed the stay.", "name": "Palaniappan", "source": "Google"},
-    {"quote": "Value for money place. Nice villas. Great breakfast. Peaceful area to stay.", "name": "Charles Daniel", "source": "Tripadvisor"},
-    {"quote": "The room and restroom are very neat and clean. The garden area was so relaxing.", "name": "Siva Kumar", "source": "Google"}
+    {
+      "quote": "10/10 for the hospitality. Feels like home for friends and family.",
+      "name": "Vasy",
+      "source": "Google"
+    },
+    {
+      "quote": "We booked a two-bedroom villa which was very comfortable and well-maintained. The bathrooms were spotless clean.",
+      "name": "Gunaseelan",
+      "source": "Google"
+    },
+    {
+      "quote": "Courteous staff. We had ordered dinner, birthday cake and camp fire through them. Enjoyed the stay.",
+      "name": "Palaniappan",
+      "source": "Google"
+    },
+    {
+      "quote": "Value for money place. Nice villas. Great breakfast. Peaceful area to stay.",
+      "name": "Charles Daniel",
+      "source": "Tripadvisor"
+    },
+    {
+      "quote": "The room and restroom are very neat and clean. The garden area was so relaxing.",
+      "name": "Siva Kumar",
+      "source": "Google"
+    }
   ],
-
   "gallery": [
-    ["property", "home/hills-view", "The Yelagiri hills around Mangalam"],
-    ["property", "home/evening-exterior", "Sapphire Stayss in the evening"],
-    ["property", "property/garden-swing", "Garden path and children's swing"],
-    ["property", "property/garden-path", "Stone path through the garden"],
-    ["property", "property/garden-pergola", "Garden pergola covered in creepers"],
-    ["property", "property/garden-bench", "Garden bench under the trees"],
-    ["property", "gallery/building", "The main building"],
-    ["property", "gallery/gate", "Entrance gate"],
-    ["property", "gallery/garden-benches", "Stone benches in the garden"],
-    ["property", "gallery/bougainvillea", "Bougainvillea along the garden wall"],
-    ["property", "gallery/terrace-plants", "Terrace with potted plants"],
-    ["property", "gallery/hanging-plants", "Hanging plants by the stairs"],
-    ["property", "gallery/cane-chair", "Cane chair on the porch"],
-    ["property", "gallery/parking", "Parking inside the property"],
-    ["property", "property/papaya-sky", "Papaya tree against the sky"],
-    ["rooms", "rooms/deluxe-villa-1", "Deluxe Villa living area"],
-    ["rooms", "rooms/deluxe-villa-4", "Deluxe Villa bedroom"],
-    ["rooms", "rooms/deluxe-family-suite-1", "Deluxe Family Suite"],
-    ["rooms", "rooms/family-room-garden-view-1", "Family Room with Garden View"],
-    ["rooms", "rooms/double-or-twin-room-1", "Double or Twin Room"],
-    ["rooms", "rooms/double-room-mountain-view-1", "Double Room with Mountain View"],
-    ["rooms", "rooms/double-room-mountain-view-3", "Armchair by the window"],
-    ["rooms", "rooms/king-room-mountain-view-1", "King Room with Mountain View"],
-    ["rooms", "gallery/headboard", "Padded headboard and cushions"],
-    ["rooms", "gallery/villa-lounge", "Villa lounge"],
-    ["dining", "gallery/dining-room", "Glass-walled dining room"],
-    ["dining", "home/breakfast-idly", "Idly, chutney and sambar for breakfast"],
-    ["dining", "gallery/dining-exterior", "Dining room from the garden"],
-    ["evenings", "home/campfire", "Campfire in the garden"],
-    ["evenings", "gallery/campfire", "Campfire close up"],
-    ["evenings", "gallery/front-night", "The front of the property at night"],
-    ["evenings", "gallery/courtyard-evening", "Courtyard lit up in the evening"],
-    ["evenings", "gallery/lobby-night", "Reception at night"],
-    ["evenings", "gallery/stairs-night", "Lit staircase at night"],
-    ["evenings", "property/entrance-night", "Entrance with plants at night"],
-    ["evenings", "gallery/lamp", "Hanging lamp"],
-    ["evenings", "gallery/tree-lights", "Fairy lights on a tree"],
-    ["evenings", "gallery/water-feature", "Water feature with plants"]
+    [
+      "property",
+      "home/hills-view",
+      "The Yelagiri hills around Mangalam"
+    ],
+    [
+      "property",
+      "home/evening-exterior",
+      "Sapphire Stayss in the evening"
+    ],
+    [
+      "property",
+      "property/garden-swing",
+      "Garden path and children's swing"
+    ],
+    [
+      "property",
+      "property/garden-path",
+      "Stone path through the garden"
+    ],
+    [
+      "property",
+      "property/garden-pergola",
+      "Garden pergola covered in creepers"
+    ],
+    [
+      "property",
+      "property/garden-bench",
+      "Garden bench under the trees"
+    ],
+    [
+      "property",
+      "gallery/building",
+      "The main building"
+    ],
+    [
+      "property",
+      "gallery/gate",
+      "Entrance gate"
+    ],
+    [
+      "property",
+      "gallery/garden-benches",
+      "Stone benches in the garden"
+    ],
+    [
+      "property",
+      "gallery/bougainvillea",
+      "Bougainvillea along the garden wall"
+    ],
+    [
+      "property",
+      "gallery/terrace-plants",
+      "Terrace with potted plants"
+    ],
+    [
+      "property",
+      "gallery/hanging-plants",
+      "Hanging plants by the stairs"
+    ],
+    [
+      "property",
+      "gallery/cane-chair",
+      "Cane chair on the porch"
+    ],
+    [
+      "property",
+      "gallery/parking",
+      "Parking inside the property"
+    ],
+    [
+      "property",
+      "property/papaya-sky",
+      "Papaya tree against the sky"
+    ],
+    [
+      "rooms",
+      "rooms/deluxe-villa-1",
+      "Deluxe Villa living area"
+    ],
+    [
+      "rooms",
+      "rooms/deluxe-villa-4",
+      "Deluxe Villa bedroom"
+    ],
+    [
+      "rooms",
+      "rooms/deluxe-family-suite-1",
+      "Deluxe Family Suite"
+    ],
+    [
+      "rooms",
+      "rooms/family-room-garden-view-1",
+      "Family Room with Garden View"
+    ],
+    [
+      "rooms",
+      "rooms/double-or-twin-room-1",
+      "Double or Twin Room"
+    ],
+    [
+      "rooms",
+      "rooms/double-room-mountain-view-1",
+      "Double Room with Mountain View"
+    ],
+    [
+      "rooms",
+      "rooms/double-room-mountain-view-3",
+      "Armchair by the window"
+    ],
+    [
+      "rooms",
+      "rooms/king-room-mountain-view-1",
+      "King Room with Mountain View"
+    ],
+    [
+      "rooms",
+      "gallery/headboard",
+      "Padded headboard and cushions"
+    ],
+    [
+      "rooms",
+      "gallery/villa-lounge",
+      "Villa lounge"
+    ],
+    [
+      "dining",
+      "gallery/dining-room",
+      "Glass-walled dining room"
+    ],
+    [
+      "dining",
+      "home/breakfast-idly",
+      "Idly, chutney and sambar for breakfast"
+    ],
+    [
+      "dining",
+      "gallery/dining-exterior",
+      "Dining room from the garden"
+    ],
+    [
+      "evenings",
+      "home/campfire",
+      "Campfire in the garden"
+    ],
+    [
+      "evenings",
+      "gallery/campfire",
+      "Campfire close up"
+    ],
+    [
+      "evenings",
+      "gallery/front-night",
+      "The front of the property at night"
+    ],
+    [
+      "evenings",
+      "gallery/courtyard-evening",
+      "Courtyard lit up in the evening"
+    ],
+    [
+      "evenings",
+      "gallery/lobby-night",
+      "Reception at night"
+    ],
+    [
+      "evenings",
+      "gallery/stairs-night",
+      "Lit staircase at night"
+    ],
+    [
+      "evenings",
+      "property/entrance-night",
+      "Entrance with plants at night"
+    ],
+    [
+      "evenings",
+      "gallery/lamp",
+      "Hanging lamp"
+    ],
+    [
+      "evenings",
+      "gallery/tree-lights",
+      "Fairy lights on a tree"
+    ],
+    [
+      "evenings",
+      "gallery/water-feature",
+      "Water feature with plants"
+    ]
   ]
 }

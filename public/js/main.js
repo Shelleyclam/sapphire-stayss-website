@@ -34,52 +34,30 @@
     });
   }
 
-  // Every element marked data-book opens the booking page, or WhatsApp until one is set up
-  document.querySelectorAll('[data-book]').forEach(function (el) {
-    var room = el.getAttribute('data-room');
-    if (BOOKING_URL) {
-      el.setAttribute('href', BOOKING_URL);
-    } else {
-      el.setAttribute('href', whatsappLink(
-        'Hello Sapphire Stayss, I would like to book' + (room ? ' the ' + room : ' a room') + '. My dates are: '
-      ));
-    }
-    el.setAttribute('target', '_blank');
-    el.setAttribute('rel', 'noopener');
-  });
-
-  // Availability forms
-  document.querySelectorAll('form[data-availability]').forEach(function (form) {
-    var inEl = form.querySelector('[name="checkin"]');
-    var outEl = form.querySelector('[name="checkout"]');
-    var guestsEl = form.querySelector('[name="guests"]');
-    var room = form.getAttribute('data-room');
-
+  // Date pairs: sensible defaults, and check-out always after check-in
+  function setupDates(inEl, outEl, fromIn, fromOut) {
     var start = new Date(); start.setDate(start.getDate() + 7);
     var end = new Date(start); end.setDate(end.getDate() + 1);
-    inEl.value = iso(start);
-    outEl.value = iso(end);
+    inEl.value = fromIn || iso(start);
+    outEl.value = fromOut || iso(end);
     inEl.min = iso(new Date());
     outEl.min = iso(new Date(Date.now() + 864e5));
-
     inEl.addEventListener('change', function () {
       var p = inEl.value.split('-');
       var next = new Date(+p[0], +p[1] - 1, +p[2] + 1);
       outEl.min = iso(next);
       if (outEl.value <= inEl.value) outEl.value = iso(next);
     });
+  }
 
+  // Availability forms go to the booking page, or to the enquiry form with the details filled in
+  document.querySelectorAll('form[data-availability]').forEach(function (form) {
+    setupDates(form.querySelector('[name="checkin"]'), form.querySelector('[name="checkout"]'));
     form.addEventListener('submit', function (e) {
-      e.preventDefault();
       if (BOOKING_URL) {
+        e.preventDefault();
         window.open(BOOKING_URL, '_blank', 'noopener');
-        return;
       }
-      var text = 'Hello Sapphire Stayss, is ' + (room ? 'the ' + room : 'a room') + ' available?\n' +
-        'Check-in: ' + niceDate(inEl.value) + '\n' +
-        'Check-out: ' + niceDate(outEl.value) + '\n' +
-        'Guests: ' + guestsEl.value;
-      window.open(whatsappLink(text), '_blank', 'noopener');
     });
   });
 
@@ -155,17 +133,35 @@
     });
   }
 
-  // Enquiry form: sends the details as a WhatsApp message
+  // Enquiry form: filled in from the availability form, sent as a WhatsApp message
   var enquiry = document.getElementById('enquiry-form');
   if (enquiry) {
+    var f = enquiry.elements;
+    var params = new URLSearchParams(window.location.search);
+    setupDates(f.checkin, f.checkout, params.get('checkin'), params.get('checkout'));
+    if (params.get('guests')) f.guests.value = params.get('guests');
+    if (params.get('room')) f.room.value = params.get('room');
+
+    enquiry.querySelectorAll('[data-step]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var n = (parseInt(f.guests.value, 10) || 1) + parseInt(btn.getAttribute('data-step'), 10);
+        f.guests.value = Math.max(1, Math.min(20, n));
+      });
+    });
+
     enquiry.addEventListener('submit', function (e) {
       e.preventDefault();
-      var f = enquiry.elements;
-      var lines = ['Hello Sapphire Stayss, I have an enquiry.', 'Name: ' + f.name.value];
-      if (f.phone.value) lines.push('Phone: ' + f.phone.value);
-      if (f.dates.value) lines.push('Dates: ' + f.dates.value);
-      if (f.guests.value) lines.push('Guests: ' + f.guests.value);
-      lines.push('', f.message.value);
+      var room = f.room.value ? f.room.options[f.room.selectedIndex].text : 'Any room';
+      var lines = [
+        'Hello Sapphire Stayss, I would like to book.',
+        'Name: ' + f.name.value,
+        'Check-in: ' + niceDate(f.checkin.value),
+        'Check-out: ' + niceDate(f.checkout.value),
+        'Guests: ' + f.guests.value,
+        'Room: ' + room
+      ];
+      if (f.phone.value) lines.splice(2, 0, 'Phone: ' + f.phone.value);
+      if (f.message.value) lines.push('', f.message.value);
       window.open(whatsappLink(lines.join('\n')), '_blank', 'noopener');
     });
   }

@@ -52,8 +52,7 @@ def km(d):
 
 
 def sleeps(room):
-    a, c = room["adults"], room["children"]
-    return f"{a} adults + {c} {'child' if c == 1 else 'children'}"
+    return f"{room['adults']} adults"
 
 
 def short(room):
@@ -84,6 +83,13 @@ def wa(text=""):
     return f"https://wa.me/{B['phone_whatsapp_raw']}" + (f"?text={quote(text)}" if text else "")
 
 
+def book_href(p, room=None):
+    """Where Book buttons go: the booking page once it exists, otherwise our enquiry form."""
+    if BOOKING_URL:
+        return e(BOOKING_URL)
+    return f"{p}contact.html" + (f"?room={room['slug']}" if room else "") + "#enquiry"
+
+
 NAV = [
     ("index.html", "Home", "home"),
     ("rooms.html", "Rooms", "rooms"),
@@ -107,7 +113,7 @@ def header(p, current):
     <button class="menu-btn" id="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span><span></span><span></span></button>
     <nav class="nav" id="site-nav" aria-label="Main">
 {links}
-        <a class="btn" href="{wa()}" data-book>Book now</a>
+        <a class="btn" href="{book_href(p)}">Book now</a>
     </nav>
   </div>
 </header>"""
@@ -208,29 +214,17 @@ def page(path, title, description, content, current="", jsonld=None, image="home
     return path
 
 
-def availability_form(room=None, boxed=False):
-    opts = ["1 adult", "2 adults", "2 adults, 1 child", "3 adults", "3 adults, 1 child",
-            "4 adults", "4 adults, 1 child", "4 adults, 2 children", "More than 4 adults"]
-    if room:
-        def fits(o):
-            if o.startswith("More"):
-                return False
-            adults = int(o[0])
-            kids = int(o.split(", ")[1][0]) if ", " in o else 0
-            return adults <= room["adults"] and kids <= room["children"]
-        opts = [o for o in opts if fits(o)]
-    default = "2 adults"
-    options = "".join(f'<option{" selected" if o == default else ""}>{o}</option>' for o in opts)
+def availability_form(p, room=None, boxed=False):
+    """Dates + guests. Sends the guest to the booking page, or to our enquiry form with the details filled in."""
+    most = room["adults"] if room else 12
+    options = "".join(f'<option value="{n}"{" selected" if n == 2 else ""}>{n}</option>' for n in range(1, most + 1))
     uid = room["slug"] if room else "home"
-    room_attr = f' data-room="{e(room["name"])}"' if room else ""
-    note = ("Opens the booking page in a new tab." if BOOKING_URL else
-            "Sends your dates to us on WhatsApp. We reply with availability, usually within the hour.")
-    return f"""<form class="booking{' boxed' if boxed else ''}" data-availability{room_attr} aria-label="Check availability">
-    <div class="field"><label for="in-{uid}">Check-in</label><input id="in-{uid}" name="checkin" type="date" required></div>
+    room_field = f'<input type="hidden" name="room" value="{room["slug"]}">' if room else ""
+    return f"""<form class="booking{' boxed' if boxed else ''}" action="{p}contact.html#enquiry" method="get" data-availability aria-label="Check availability">
+    {room_field}<div class="field"><label for="in-{uid}">Check-in</label><input id="in-{uid}" name="checkin" type="date" required></div>
     <div class="field"><label for="out-{uid}">Check-out</label><input id="out-{uid}" name="checkout" type="date" required></div>
     <div class="field"><label for="g-{uid}">Guests</label><select id="g-{uid}" name="guests">{options}</select></div>
     <button class="btn" type="submit">Check availability</button>
-    <p class="booking-note">{note}</p>
   </form>"""
 
 
@@ -241,7 +235,7 @@ def room_card(p, room, in_strip=True):
     return f"""<a class="room-card" href="{p}rooms/{room['slug']}.html">
       <div class="img">{img(p, photo, alt, sizes)}</div>
       <span class="room-tag">{e(room['tag'])}</span>
-      <div class="room-top"><h3>{e(short(room) if in_strip else room['name'])}</h3><span class="room-size">{room['size_m2']} m²</span></div>{summary}
+      <div class="room-top"><h3>{e(short(room) if in_strip else room['name'])}</h3></div>{summary}
       <div class="room-meta"><span>{e(room['beds_short'])} · {e(sleeps(room))}</span><b>{rupees(room['price'])}</b></div>
     </a>"""
 
@@ -302,14 +296,14 @@ def home(p):
     <div class="hero-text">
       <span class="label">Yelagiri Hills · Tamil Nadu</span>
       <h1>Where serenity reigns</h1>
-      <p>Seven rooms and a private villa around a quiet garden in Mangalam, with views across the Yelagiri hills.</p>
+      <p>Tucked away in Mangalam at the foot of Swamymalai, Yelagiri's highest hill, with green slopes all around, cool air and a calm you can hear.</p>
     </div>
     <figure class="hero-photo">
       {img(p, "home/hills-view", "Green Yelagiri hills under a blue sky", "(max-width: 1280px) 100vw, 1240px", lazy=False)}
       <figcaption>The hills around Mangalam</figcaption>
     </figure>
   </section>
-  {availability_form()}
+  {availability_form(p)}
 </div>
 
 <section class="wrap section intro" aria-label="About">
@@ -326,7 +320,7 @@ def home(p):
   <div class="wrap">
     <div class="rooms-head">
       <div><span class="label">Stay</span><h2 class="big" id="rooms-title">The rooms</h2></div>
-      <p>Per night, breakfast included. Extra mattress {B['extra_mattress']} a night, breakfast included.</p>
+      <p>Per night, breakfast included.</p>
       <div class="strip-ctrl">
         <button type="button" id="strip-prev" aria-label="Previous room">←</button>
         <button type="button" id="strip-next" aria-label="Next room">→</button>
@@ -363,7 +357,7 @@ def home(p):
   </div>
   <div class="moment compact">
     <time>14:30<small>Afternoon</small></time>
-    <div><h3>Boating or adventure parks</h3><p>Take a boat out on Punganoor Lake at the Boat House, or spend the afternoon at Thrill Valley, Lake Zone or Wild Waves. All are about 3.5 km away. With children? Fundura Park is 2 km and the Birds Park is 1.5 km.</p></div>
+    <div><h3>Boating or adventure parks</h3><p>Take a boat out on Punganoor Lake at the Boat House, or spend the afternoon at Thrill Valley, Lake Zone or Wild Waves. All are about 3.5 km away. With children? Fundera bird park is 2 km and the Birds Park is 1.5 km.</p></div>
   </div>
   <div class="moment compact">
     <time>17:00<small>Late afternoon</small></time>
@@ -378,9 +372,10 @@ def home(p):
     <div><h3>Campfire and dinner</h3><p>Tell us a day ahead and we will light a campfire in the garden and order dinner in from a good local restaurant. Celebrating? We can arrange a cake and decorate your room.</p><span class="tag">On request</span></div>
     {img(p, "home/campfire", "Campfire in the garden seating area at night", "(max-width: 920px) 100vw, 45vw")}
   </div>
-  <div class="moment compact">
+  <div class="moment">
     <time>06:30<small>Early morning</small></time>
     <div><h3>Climb Swamymalai</h3><p>The trek to Swamymalai, the highest point in Yelagiri, starts just 500 m behind the resort. Set off early for cool air and clear views, and be back in time for breakfast.</p><span class="tag">Starts behind the resort</span></div>
+    {img(p, "home/swamymalai-view", "View over forested hills and the plains from the top of Swamymalai", "(max-width: 920px) 100vw, 45vw")}
   </div>
   <div class="moment morning">
     <time>08:30<small>Morning</small></time>
@@ -435,7 +430,7 @@ def rooms_page(p):
     return f"""<section class="wrap page-head">
   <span class="label">Stay</span>
   <h1>Rooms &amp; prices</h1>
-  <p>Six room types, seven rooms in all. Prices are per room per night and include breakfast. An extra mattress is {B['extra_mattress']} a night, breakfast included.</p>
+  <p>Every stay includes breakfast.</p>
 </section>
 <section class="wrap section">
   <div class="room-grid">
@@ -480,14 +475,12 @@ def room_page(room):
     <aside class="room-aside">
       <div class="price-big">{rupees(room['price'])}<small>per night, breakfast included</small></div>
       <dl class="spec">
-        <div><dt>Size</dt><dd>{room['size_m2']} m² ({room['size_sqft']} sq ft)</dd></div>
         <div><dt>Beds</dt><dd>{e(room['beds'])}</dd></div>
-        <div><dt>Sleeps</dt><dd>Up to {e(sleeps(room))} ({B['child_age']} years)</dd></div>
+        <div><dt>Sleeps</dt><dd>Up to {e(sleeps(room))}</dd></div>
         <div><dt>View</dt><dd>{e(room['views'])}</dd></div>
         {units}
-        <div><dt>Extra bed</dt><dd>Mattress {B['extra_mattress']} a night, breakfast included</dd></div>
       </dl>
-      {availability_form(room, boxed=True)}
+      {availability_form(p, room, boxed=True)}
       <p class="small-print">{B['advance_percent']}% advance to confirm, balance at check-in. Free cancellation up to {B['free_cancellation_days']} days before arrival. <a href="{p}policies.html">Policies</a></p>
     </aside>
   </div>
@@ -529,11 +522,25 @@ def gallery_page(p):
 
 # ---------------------------------------------------------------- Explore
 
+def maps_search(name):
+    from urllib.parse import quote
+    return "https://www.google.com/maps/search/?api=1&query=" + quote(name + ", Yelagiri")
+
+
 def place_list(items):
     rows = []
     for it in sorted(items, key=lambda x: x["km"]):
-        note = f"<p>{e(it['note'])}</p>" if it["note"] else ""
-        rows.append(f'<li><span class="km">{km(it["km"])}</span><div><h3>{e(it["name"])}</h3>{note}</div></li>')
+        rows.append(f"""<li>
+        <span class="km">{km(it["km"])}</span>
+        <div>
+          <h3>{e(it["name"])}</h3>
+          <p>{e(it["about"])}</p>
+          <dl class="place-meta">
+            <div><dt>Best time</dt><dd>{e(it["best"])}</dd></div>
+            <div><dt>Where</dt><dd>{e(it["where"])} · <a href="{maps_search(it.get("maps", it["name"]))}" target="_blank" rel="noopener">Map</a></dd></div>
+          </dl>
+        </div>
+      </li>""")
     return "\n      ".join(rows)
 
 
@@ -542,33 +549,30 @@ def explore_page(p):
     return f"""<section class="wrap page-head">
   <span class="label">Explore Yelagiri</span>
   <h1>Things to do nearby</h1>
-  <p>Most of Yelagiri's parks, lakes and viewpoints are within 4 km of Sapphire Stayss. Distances are by road from our gate.</p>
+  <p>Most of Yelagiri's lakes, parks, temples and viewpoints are within 4 km of Sapphire Stayss. Distances are by road from our gate. Timings and tickets change, so check before you go, or ask us.</p>
 </section>
 <section class="wrap section">
   <div class="highlight-box">
     <div>
       <span class="label">Right behind us</span>
       <h2>The Swamymalai trek</h2>
-      <p>The trail to Swamymalai, the highest point in Yelagiri, starts about 500 m behind the resort. Go early in the morning when the air is cool, carry water and wear good shoes. Ask us for directions to the start.</p>
+      <p>Swamymalai is the highest peak in Yelagiri, at about 1,320 m. The trail starts in Mangalam, about 500 m behind the resort, and is roughly 6 km there and back. Most people take around 3 hours at an easy pace.</p>
+      <p style="margin-top:12px">The trek is managed by the Forest Department and needs a ticket, so ask us to help you book. Start early, carry water and wear good shoes. Avoid it in heavy rain.</p>
     </div>
-    {img(p, "property/garden-path", "Stone path through the garden at Sapphire Stayss", "(max-width: 920px) 100vw, 45vw")}
+    {img(p, "home/swamymalai-view", "View over forested hills and the plains from the top of Swamymalai", "(max-width: 920px) 100vw, 45vw")}
   </div>
 </section>
 <section class="wrap section tight-top">
-  <div class="explore-cols">
-    <div>
-      <h2 class="big">Things to do</h2>
-      <ul class="places">
+  <h2 class="big">Things to do</h2>
+  <ul class="places">
       {place_list(a['do'])}
-      </ul>
-    </div>
-    <div>
-      <h2 class="big">Places to visit</h2>
-      <ul class="places">
+  </ul>
+</section>
+<section class="wrap section tight-top">
+  <h2 class="big">Places to visit</h2>
+  <ul class="places">
       {place_list(a['visit'])}
-      </ul>
-    </div>
-  </div>
+  </ul>
 </section>
 <section class="wrap section tight-top">
   <div class="split-head">
@@ -590,7 +594,7 @@ FAQ = [
     ("What is the cancellation policy?",
      f"Cancel up to {B['free_cancellation_days']} days before your check-in date and we refund your advance in full. If you cancel later than that, or do not arrive, the advance is not refunded."),
     ("Can I add an extra bed?",
-     f"Yes. An extra mattress costs {B['extra_mattress']} a night and includes breakfast for the extra guest."),
+     "Yes. We can add an extra mattress, and breakfast is included for the extra guest. Ask us for the price."),
     ("How many people can stay in a room?",
      "Each double bed sleeps two adults and one child, and the single bed sleeps one. Every room page shows the maximum number of guests."),
     ("Who counts as a child?",
@@ -621,7 +625,6 @@ def policies_page(p):
     <div><dt>Cancellation</dt><dd>Free up to {B['free_cancellation_days']} days before</dd></div>
     <div><dt>Breakfast</dt><dd>Included, {B['breakfast_time']}</dd></div>
     <div><dt>Children</dt><dd>{B['child_age'].capitalize()} years</dd></div>
-    <div><dt>Extra mattress</dt><dd>{B['extra_mattress']} a night</dd></div>
     <div><dt>ID</dt><dd>Photo ID for all adults</dd></div>
     <div><dt>Parking &amp; Wi-Fi</dt><dd>Free</dd></div>
   </dl>
@@ -638,6 +641,7 @@ def policies_page(p):
 # ---------------------------------------------------------------- Contact
 
 def contact_page(p):
+    room_options = "".join(f'<option value="{r["slug"]}">{e(r["name"])}</option>' for r in ROOMS)
     return f"""<section class="wrap page-head">
   <span class="label">Contact</span>
   <h1>Talk to us</h1>
@@ -656,14 +660,23 @@ def contact_page(p):
       <p style="margin-top:22px"><a class="btn btn-line" href="{e(B['maps_url'])}" target="_blank" rel="noopener">Get directions</a></p>
     </div>
     <div>
-      <h2 class="big" style="margin-bottom:8px">Send an enquiry</h2>
-      <p class="lead" style="margin-bottom:22px">Fill this in and tap send. It opens WhatsApp with your message ready to go.</p>
+      <h2 class="big" id="enquiry" style="margin-bottom:8px">Book or enquire</h2>
+      <p class="lead" style="margin-bottom:22px">Tell us your dates and we will confirm availability. Tapping send opens WhatsApp with your details ready to go.</p>
       <form class="form" id="enquiry-form">
         <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" required autocomplete="name"></div>
-        <div class="field"><label for="f-phone">Phone (optional)</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
-        <div class="field"><label for="f-dates">Dates (optional)</label><input id="f-dates" name="dates" placeholder="e.g. 14–16 Nov"></div>
-        <div class="field"><label for="f-guests">Guests (optional)</label><input id="f-guests" name="guests" placeholder="e.g. 2 adults, 1 child"></div>
-        <div class="field full"><label for="f-msg">Message</label><textarea id="f-msg" name="message" required></textarea></div>
+        <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel"></div>
+        <div class="field"><label for="f-in">Check-in</label><input id="f-in" name="checkin" type="date" required></div>
+        <div class="field"><label for="f-out">Check-out</label><input id="f-out" name="checkout" type="date" required></div>
+        <div class="field">
+          <label for="f-guests">Guests</label>
+          <div class="stepper">
+            <button type="button" data-step="-1" aria-label="One guest fewer">−</button>
+            <input id="f-guests" name="guests" type="number" min="1" max="20" value="2" inputmode="numeric">
+            <button type="button" data-step="1" aria-label="One guest more">+</button>
+          </div>
+        </div>
+        <div class="field"><label for="f-room">Room</label><select id="f-room" name="room"><option value="">Any room</option>{room_options}</select></div>
+        <div class="field full"><label for="f-msg">Message (optional)</label><textarea id="f-msg" name="message" placeholder="Anything we should know, such as a campfire or a birthday"></textarea></div>
         <div class="actions"><button class="btn" type="submit">Send on WhatsApp</button></div>
       </form>
     </div>
@@ -698,7 +711,7 @@ def terms_body(p):
     <h2>Check-in and check-out</h2>
     <p>Check-in and check-out are at {B['check_in']}. All adult guests must show a valid government photo ID at check-in. We may refuse check-in if valid ID is not provided.</p>
     <h2>Occupancy</h2>
-    <p>Children are guests {B['child_age']} years old; guests aged 6 and over count as adults. Each room has a maximum number of guests, shown on its page. Extra guests need an extra mattress at {B['extra_mattress']} per night, subject to space in the room.</p>
+    <p>Children are guests {B['child_age']} years old; guests aged 6 and over count as adults. Each room has a maximum number of guests, shown on its page. Extra guests need an extra mattress, subject to space in the room.</p>
     <h2>House rules</h2>
     <ul>
       <li>Please respect other guests and keep noise low at night.</li>
@@ -766,12 +779,11 @@ def main():
                       rooms_page, "rooms", image=ROOMS[0]["photos"][0][0]))
     for r in ROOMS:
         built.append(page(f"rooms/{r['slug']}.html", f"{r['name']} | Sapphire Stayss, Yelagiri",
-                          f"{r['name']} at Sapphire Stayss, Yelagiri: {r['size_m2']} m², {r['beds']}, sleeps {sleeps(r)}. {rupees(r['price'])} a night with breakfast.",
+                          f"{r['name']} at Sapphire Stayss, Yelagiri: {r['beds']}, sleeps {sleeps(r)}. {rupees(r['price'])} a night with breakfast.",
                           room_page(r), "rooms", image=r["photos"][0][0], lightbox=True,
                           jsonld={"@context": "https://schema.org", "@type": "HotelRoom", "name": r["name"],
                                   "description": r["summary"], "bed": r["beds"],
-                                  "occupancy": {"@type": "QuantitativeValue", "maxValue": r["adults"] + r["children"]},
-                                  "floorSize": {"@type": "QuantitativeValue", "value": r["size_m2"], "unitCode": "MTK"},
+                                  "occupancy": {"@type": "QuantitativeValue", "maxValue": r["adults"]},
                                   "containedInPlace": {"@type": "Hotel", "name": B["name"], "url": B["site_url"] + "/"}}))
     built.append(page("gallery.html", "Photo Gallery | Sapphire Stayss, Yelagiri",
                       "Photos of the garden, rooms, villa, dining room and evenings at Sapphire Stayss in Yelagiri.",
@@ -780,7 +792,7 @@ def main():
                       "Swamymalai trek starts 500 m behind Sapphire Stayss. Boat House, Nature Park fountain show, adventure parks, temples and viewpoints within 4 km.",
                       explore_page, "explore"))
     built.append(page("policies.html", "Policies & FAQ | Sapphire Stayss, Yelagiri",
-                      "Check-in and check-out at 12 noon, 50% advance, free cancellation up to 3 days before arrival, breakfast included, extra mattress ₹200.",
+                      "Check-in and check-out at 12 noon, 50% advance, free cancellation up to 3 days before arrival, breakfast included.",
                       policies_page, "policies"))
     built.append(page("contact.html", "Contact | Sapphire Stayss, Yelagiri",
                       f"Call or WhatsApp Sapphire Stayss on {B['phone_whatsapp']}. Mangalam, Yelagiri, Tamil Nadu 635853.",
