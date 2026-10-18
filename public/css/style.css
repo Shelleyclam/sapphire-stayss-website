@@ -354,3 +354,7 @@ a { color: inherit; }
 @media (max-width: 1080px) { .place-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 920px) { .about-band, .values { grid-template-columns: 1fr; } }
 @media (max-width: 620px) { .place-grid { grid-template-columns: 1fr; } .place { padding: 20px; } }
+
+/* Must-visit places */
+.place.must { border-color: var(--ink); box-shadow: inset 0 3px 0 var(--ink); position: relative; }
+.place-badge { align-self: flex-start; font: 500 11px/1 var(--font-body); letter-spacing: .18em; text-transform: uppercase; background: var(--ink); color: var(--paper); padding: 7px 10px; }

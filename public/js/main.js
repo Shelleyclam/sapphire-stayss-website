@@ -175,7 +175,7 @@
     var apply = function () {
       var shown = 0;
       placeGrid.querySelectorAll('.place').forEach(function (card) {
-        var ok = (cat === 'all' || card.getAttribute('data-cat') === cat) &&
+        var ok = (cat === 'all' || card.getAttribute('data-cat') === cat || (cat === 'must' && card.getAttribute('data-must') === 'yes')) &&
                  (time === 'any' || card.getAttribute('data-times').split(' ').indexOf(time) !== -1);
         card.hidden = !ok;
         if (ok) shown++;

@@ -292,7 +292,7 @@ def home(p):
         for r in rv[1:4]
     )
     stops = [(0, "Sapphire Stayss", True), (0.5, "Swamymalai trek starts, right behind us", False),
-             (1, "Selfie Panda &amp; Chocolate Factory", False), (1.5, "Yelagiri Birds Park", False),
+             (1, "Selfie Panda &amp; Chocolate Factory", False), (1.5, "Murugan (Velavan) Temple", False),
              (2, "Fundura Park", False), (2.5, "Nilavoor View Point", False),
              (3.5, "Boat House &amp; Nature Park", False), (4, "Mountain View Adventure Park", False)]
     road = "\n        ".join(
@@ -365,7 +365,7 @@ def home(p):
   </div>
   <div class="moment compact">
     <time>14:30<small>Afternoon</small></time>
-    <div><h3>Boating or adventure parks</h3><p>Take a boat out on Punganoor Lake at the Boat House, or spend the afternoon at Thrill Valley, Lake Zone or Wild Waves. All are about 3.5 km away. With children? Fundera bird park is 2 km and the Birds Park is 1.5 km.</p></div>
+    <div><h3>Boating or adventure parks</h3><p>Take a boat out on Punganoor Lake at the Boat House, or spend the afternoon at Thrill Valley, Lake Zone or Wild Waves. All are about 3.5 km away. With children? Fundera bird park is 2 km away.</p></div>
   </div>
   <div class="moment compact">
     <time>17:00<small>Late afternoon</small></time>
@@ -555,8 +555,11 @@ def place_card(it, cats):
     directions = ("https://www.google.com/maps/dir/?api=1&origin=" + quote(ORIGIN) +
                   "&destination=" + quote(it["maps"]))
     times = " ".join(it["times"])
-    return f"""<article class="place" data-cat="{it['cat']}" data-times="{times}">
-      <div class="place-top"><span class="place-km">{km(it['km'])}</span><span class="place-cat">{e(cats[it['cat']])}</span></div>
+    must = it.get("must")
+    badge = '<span class="place-badge">★ Must visit</span>' if must else ""
+    tip = f'\n      <p class="place-tip"><b>Tip</b> {e(it["tip"])}</p>' if it.get("tip") else ""
+    return f"""<article class="place{' must' if must else ''}" data-cat="{it['cat']}" data-times="{times}" data-must="{'yes' if must else 'no'}">
+      {badge}<div class="place-top"><span class="place-km">{km(it['km'])}</span><span class="place-cat">{e(cats[it['cat']])}</span></div>
       <h3>{e(it['name'])}</h3>
       <p>{e(it['about'])}</p>
       <dl class="place-facts">
@@ -564,8 +567,7 @@ def place_card(it, cats):
         <div><dt>Time needed</dt><dd>{e(it['duration'])}</dd></div>
         <div><dt>Good for</dt><dd>{e(it['good_for'])}</dd></div>
         <div><dt>Where</dt><dd>{e(it['where'])}</dd></div>
-      </dl>
-      <p class="place-tip"><b>Tip</b> {e(it['tip'])}</p>
+      </dl>{tip}
       <a class="btn place-btn" href="{directions}" target="_blank" rel="noopener">Get directions</a>
     </article>"""
 
@@ -574,9 +576,10 @@ def explore_page(p):
     from urllib.parse import quote
     P = DATA["places"]
     cats = dict(P["categories"])
-    items = sorted(P["list"], key=lambda x: x["km"])
+    items = sorted(P["list"], key=lambda x: (not x.get("must"), x["km"]))
     cards = "\n    ".join(place_card(it, cats) for it in items)
-    cat_btns = '<button type="button" data-place-cat="all" aria-pressed="true">All</button>' + "".join(
+    cat_btns = ('<button type="button" data-place-cat="all" aria-pressed="true">All</button>'
+                '<button type="button" data-place-cat="must" aria-pressed="false">★ Must visit</button>') + "".join(
         f'<button type="button" data-place-cat="{k}" aria-pressed="false">{e(v)}</button>' for k, v in P["categories"])
     time_btns = '<button type="button" data-place-time="any" aria-pressed="true">Any time</button>' + "".join(
         f'<button type="button" data-place-time="{k}" aria-pressed="false">{v}</button>'
