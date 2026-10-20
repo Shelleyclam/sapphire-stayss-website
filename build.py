@@ -174,7 +174,7 @@ LIGHTBOX = """<div class="lightbox" id="lightbox" hidden role="dialog" aria-moda
 </div>"""
 
 
-def page(path, title, description, content, current="", jsonld=None, image="home/hills-view", lightbox=False):
+def page(path, title, description, content, current="", jsonld=None, image="home/hero-swamymalai", lightbox=False):
     depth = path.count("/")
     p = "../" * depth
     canonical = B["site_url"] + "/" + ("" if path == "index.html" else path)
@@ -256,7 +256,7 @@ def hotel_jsonld():
         "name": B["name"],
         "slogan": B["tagline"],
         "url": B["site_url"] + "/",
-        "image": [B["site_url"] + "/img/home/hills-view.webp", B["site_url"] + "/img/home/evening-exterior.webp"],
+        "image": [B["site_url"] + "/img/home/hero-swamymalai.webp", B["site_url"] + "/img/home/evening-exterior.webp"],
         "logo": B["site_url"] + "/img/logo.png",
         "telephone": B["phone_whatsapp"],
         "email": B["email"],
@@ -307,8 +307,12 @@ def home(p):
       <p>Tucked away in Mangalam at the foot of Swamymalai, Yelagiri's highest hill, with green slopes all around, cool air and a calm you can hear.</p>
     </div>
     <figure class="hero-photo">
-      {img(p, "home/hills-view", "Green Yelagiri hills under a blue sky", "(max-width: 1280px) 100vw, 1240px", lazy=False)}
-      <figcaption>The hills around Mangalam</figcaption>
+      <picture>
+        <source media="(max-width: 920px)" srcset="{p}img/home/hero-swamymalai-m.webp">
+        <source media="(max-width: 1100px)" srcset="{p}img/home/hero-swamymalai-sm.webp 1000w, {p}img/home/hero-swamymalai.webp 1600w" sizes="100vw">
+        <img src="{p}img/home/hero-swamymalai.webp" alt="Forested hills and the plains below, seen from the top of Swamymalai" width="1600" height="685" fetchpriority="high">
+      </picture>
+      <figcaption>The view from Swamymalai, 500 m from our gate</figcaption>
     </figure>
   </section>
   {availability_form(p)}
