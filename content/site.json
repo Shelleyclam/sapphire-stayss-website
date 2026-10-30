@@ -17,12 +17,12 @@
     "maps_url": "https://maps.app.goo.gl/gnNPDMo8Wk9LJBo39",
     "_todo_note": "Empty values below are facts still to fill in. While empty, the pages show a yellow TODO mark and the fact is left out of the schema and llms.txt. build.py lists every TODO left.",
     "geo": {
-      "latitude": "",
-      "longitude": ""
+      "latitude": "12.5873752",
+      "longitude": "78.657004"
     },
-    "maps_embed_url": "",
-    "google_business_url": "",
-    "google_review_url": "",
+    "maps_embed_url": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3893.922258679139!2d78.65442907547407!3d12.587375187693821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bad010025796df3%3A0xdfdc81c1bd5afc79!2sSapphire%20Stayss!5e0!3m2!1sen!2sin!4v1793358820821!5m2!1sen!2sin",
+    "google_business_url": "https://maps.google.com/?cid=16130910634439801977",
+    "google_review_url": "https://www.google.com/search?q=Sapphire+Stayss#lrd=0x3bad010025796df3:0xdfdc81c1bd5afc79,3,,,,",
     "same_as": [],
     "site_url": "https://sapphirestayss.in",
     "check_in": "12 noon",
@@ -32,9 +32,12 @@
     "extra_mattress": "₹200",
     "breakfast_time": "8:30 to 10 AM",
     "child_age": "under 6",
-    "pool": "",
-    "pets": "",
-    "station_pickup": "",
+    "pool": "no",
+    "pets": "no",
+    "station_pickup": "no",
+    "prices_include_gst": true,
+    "rate_note": "The same rates apply every day of the week, including weekends and holidays.",
+    "landmark": "In Mangalam, just before Mangalam Government School, turn left at the Sapphire Stayss name board.",
     "year": 2026,
     "about": {
       "run_by": "",
@@ -870,10 +873,10 @@
     ]
   },
   "travel": {
-    "_note": "Facts for the FAQ and the two 'How to reach' pages. Figures are to Yelagiri town from published travel guides and vary between sources, so the pages say 'about'. verified=false shows a TODO asking you to check them against your own Google Maps route to the resort and then set verified to true.",
-    "verified": false,
+    "_note": "Facts for the FAQ and the two 'How to reach' pages. km is by road from the city to the resort gate (confirmed by the owner). Drive times are typical figures from travel guides.",
+    "verified": true,
     "bangalore": {
-      "km": "about 160 km",
+      "km": "167 km",
       "time": "3½ to 4 hours",
       "route": [
         "Bengaluru",
@@ -886,7 +889,7 @@
       ]
     },
     "chennai": {
-      "km": "about 230 to 250 km",
+      "km": "255 km",
       "time": "4½ to 5½ hours",
       "route": [
         "Chennai",

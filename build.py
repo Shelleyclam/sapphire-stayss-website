@@ -306,7 +306,7 @@ HOTEL_ID = B["site_url"] + "/#hotel"
 def amenities():
     """Hotel amenities for the schema and llms.txt. The pool is only listed once the owner confirms it."""
     names = DATA["room_amenities"] + ["Garden", "Glass-walled dining room", "Children's swing"]
-    if B["pool"]:
+    if B["pool"] not in ("", "no"):
         names.append("Swimming pool")
     return names
 
@@ -375,7 +375,8 @@ def room_jsonld(room):
             "priceCurrency": "INR",
             "price": room["price"],
             "priceSpecification": {"@type": "UnitPriceSpecification", "price": room["price"],
-                                   "priceCurrency": "INR", "unitText": "per night, breakfast included"},
+                                   "priceCurrency": "INR", "unitText": "per night, breakfast included",
+                                   "valueAddedTaxIncluded": bool(B["prices_include_gst"])},
             "seller": {"@id": HOTEL_ID},
         },
     }
@@ -585,7 +586,7 @@ def rooms_page(p):
       </tbody>
     </table>
   </div>
-  <p class="small-print" style="margin-top:14px">Prices are per room per night in Indian Rupees and include breakfast for every guest. {todo("say whether these prices include GST, and whether weekend or holiday rates are higher")}</p>
+  <p class="small-print" style="margin-top:14px">Prices are per room per night in Indian Rupees and include breakfast for every guest. {"Prices include GST. " if B["prices_include_gst"] else todo("say whether these prices include GST")}{e(B["rate_note"])}</p>
 </section>
 <section class="wrap section tight-top">
   <div class="highlight-box">
@@ -846,22 +847,27 @@ def about_page(p):
 def faq_items(p):
     """(question, answer HTML). Answers holding a TODO are shown on the page but left out of the FAQPage schema."""
     bl, ch, st = TRAVEL["bangalore"], TRAVEL["chennai"], TRAVEL["station"]
-    pool = (f"Yes. {e(B['pool'])}" if B["pool"] else
+    pool = ("No, Sapphire Stayss does not have a swimming pool." if B["pool"] == "no" else
+            f"Yes. {e(B['pool'])}" if B["pool"] else
             todo("say whether there is a swimming pool and, if so, its timings and rules. Until then the pool is left out of the site and the schema"))
-    pets = e(B["pets"]) if B["pets"] else todo("say whether pets are allowed, and on what conditions")
-    pickup = (f" {e(B['station_pickup'])}" if B["station_pickup"] else
+    pets = ("No, pets are not allowed at Sapphire Stayss." if B["pets"] == "no" else
+            e(B["pets"]) if B["pets"] else todo("say whether pets are allowed, and on what conditions"))
+    pickup = (" We don't run a station pickup, but message us and we will tell you the easiest way up from the station." if B["station_pickup"] == "no" else
+              f" {e(B['station_pickup'])}" if B["station_pickup"] else
               " " + todo("say whether you can arrange a taxi or pickup from Jolarpettai station, and the cost"))
     return [
         ("What are the check-in and check-out times?",
          f"Check-in and check-out are both at {B['check_in']}. If you need an early check-in or late check-out, message us and we will try to arrange it."),
         ("How far is Sapphire Stayss from Bangalore?",
-         f"Yelagiri is {e(bl['km'])} from Bengaluru, usually {e(bl['time'])} by car, via Hosur, Krishnagiri and Vaniyambadi, then up the ghat road from Ponneri.{travel_check()} "
+         f"Sapphire Stayss is {e(bl['km'])} by road from Bengaluru, usually {e(bl['time'])} by car, via Hosur, Krishnagiri and Vaniyambadi, then up the ghat road from Ponneri.{travel_check()} "
          f'See <a href="{p}yelagiri-from-bangalore.html">how to reach Yelagiri from Bangalore</a>.'),
         ("How far is Sapphire Stayss from Chennai?",
-         f"Yelagiri is {e(ch['km'])} from Chennai, usually {e(ch['time'])} by car, on the Chennai–Bengaluru highway via Vellore, Ambur and Vaniyambadi, then up the ghat road from Ponneri.{travel_check()} "
+         f"Sapphire Stayss is {e(ch['km'])} by road from Chennai, usually {e(ch['time'])} by car, on the Chennai–Bengaluru highway via Vellore, Ambur and Vaniyambadi, then up the ghat road from Ponneri.{travel_check()} "
          f'See <a href="{p}yelagiri-from-chennai.html">how to reach Yelagiri from Chennai</a>.'),
         ("What is the nearest railway station?",
-         f"{e(st['name'])}, {e(st['km'])} from Yelagiri by road. From the station you can take a taxi up the ghat road.{pickup}"),
+         f"{e(st['name'])}, {e(st['km'])} from Yelagiri by road. From the station you can take a taxi or auto up the ghat road.{pickup}"),
+        ("How do I find the resort in Mangalam?",
+         f'{e(B["landmark"])} Or open <a href="{e(B["maps_url"])}" target="_blank" rel="noopener">our Google Maps pin</a>.'),
         ("Is breakfast included?",
          f"Yes. A South Indian breakfast is complimentary for every guest, including anyone on an extra mattress. It is served {B['breakfast_time']} in our glass-walled dining room."),
         ("Do you serve lunch or dinner?",
@@ -944,7 +950,7 @@ def route_page(city):
     t = TRAVEL[city]
     name = {"bangalore": "Bangalore", "chennai": "Chennai"}[city]
     if city == "bangalore":
-        intro = (f"Yelagiri is {e(t['km'])} from Bengaluru, an easy weekend drive of {e(t['time'])}. "
+        intro = (f"Sapphire Stayss is {e(t['km'])} by road from Bengaluru, an easy weekend drive of {e(t['time'])}. "
                  "Most of it is on the national highway; only the last stretch climbs the hills.")
         steps = [
             ("Bengaluru to Krishnagiri", "Leave the city on the Hosur Road (NH 44) to Hosur, just inside Tamil Nadu and about 40 km out, and carry on to Krishnagiri, about 90 km from Bengaluru and a good place for a break."),
@@ -953,7 +959,7 @@ def route_page(city):
         ]
         other = ("chennai", "Chennai")
     else:
-        intro = (f"Yelagiri is {e(t['km'])} from Chennai, a drive of {e(t['time'])}. "
+        intro = (f"Sapphire Stayss is {e(t['km'])} by road from Chennai, a drive of {e(t['time'])}. "
                  "Almost all of it is on the Chennai–Bengaluru highway; only the last stretch climbs the hills.")
         steps = [
             ("Chennai to Vellore", "Leave Chennai on NH 48 (the Bengaluru highway) through Poonamallee, Sriperumbudur and Walajapet to Vellore. Vellore, with its fort, is a good place for a break."),
@@ -964,7 +970,7 @@ def route_page(city):
     g, st = TRAVEL["ghat"], TRAVEL["station"]
     route = " → ".join(e(x) for x in t["route"])
     step_html = "\n    ".join(f"<h3>{e(h)}</h3>\n    <p>{e(x)}</p>" for h, x in steps)
-    turn = "" if TRAVEL["verified"] else f"<p>{todo('confirm the highway turn-off and route you tell guests, and any landmark near the resort gate')}</p>"
+    turn = f"<h3>The last turn</h3>\n    <p>{e(B['landmark'])}</p>"
 
     def content(p):
         return f"""<section class="wrap page-head">
@@ -975,12 +981,12 @@ def route_page(city):
 </section>
 <section class="wrap section">
   <dl class="policy-grid">
-    <div><dt>Distance</dt><dd>{e(t['km'])}</dd></div>
+    <div><dt>Distance to the resort</dt><dd>{e(t['km'])}</dd></div>
     <div><dt>Drive time</dt><dd>{e(t['time'])}</dd></div>
     <div><dt>Ghat road</dt><dd>{g['hairpins']} hairpin bends from Ponneri</dd></div>
     <div><dt>By train</dt><dd>{e(st['name'])}, {e(st['km'])}</dd></div>
   </dl>
-  <p class="small-print" style="margin-top:14px">Distances and times are approximate and depend on traffic.{travel_check()}</p>
+  <p class="small-print" style="margin-top:14px">Distance is by road to our gate. Drive times are typical and depend on traffic.{travel_check()}</p>
 </section>
 <section class="wrap section tight-top">
   <div class="prose">
@@ -999,8 +1005,11 @@ def route_page(city):
     <h2>When you reach Yelagiri</h2>
     <p>At the top, the air is noticeably cooler than in the plains. Sapphire Stayss is in Mangalam, on the quieter side of Yelagiri at the foot of Swamymalai; open <a href="{e(B['maps_url'])}" target="_blank" rel="noopener">our Google Maps pin</a> for the last few kilometres. Check-in is at {B['check_in']}, so leaving {name} early in the morning gets you here in time to check in and enjoy a full afternoon.</p>
     <p>Weekends and holidays are busier on the highway and at Yelagiri's lake and parks, so allow extra time.</p>
-    <h2>By train</h2>
-    <p>The nearest railway station is {e(st['name'])}, {e(st['km'])} from Yelagiri. Taxis from the station take the same ghat road up from Ponneri.</p>
+    <h2>Without a car</h2>
+    <p><b>By train:</b> the nearest railway station is {e(st['name'])}, {e(st['km'])} from Yelagiri, with trains from both Chennai and Bengaluru. Taxis and autos from the station take the same ghat road up from Ponneri.</p>
+    <p><b>By bus:</b> take a long-distance bus to Vaniyambadi, Jolarpettai or Tirupattur on the plains. Local government buses run up the ghat road to Yelagiri; timings change, so check at the bus stand.</p>
+    <p><b>By air:</b> the nearest big airports are Bengaluru and Chennai; continue by road or train as above.</p>
+    <p>We don't run pickups, but message us on WhatsApp and we will help you work out the easiest way to reach us.</p>
   </div>
 </section>
 <section class="wrap section tight-top">
@@ -1068,8 +1077,8 @@ def contact_page(p):
 </section>
 <section class="wrap section tight-top" aria-labelledby="map-title">
   <div class="split-head"><h2 class="big" id="map-title">Find us in Mangalam, Yelagiri</h2><a class="btn" href="{e(B['maps_url'])}" target="_blank" rel="noopener">Get directions</a></div>
-  <div class="map"><iframe src="{e(map_embed)}" title="Map showing Sapphire Stayss in Mangalam, Yelagiri" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
-  <p class="small-print" style="margin-top:14px">Coming by road? Read the routes <a href="{p}yelagiri-from-bangalore.html">from Bangalore</a> and <a href="{p}yelagiri-from-chennai.html">from Chennai</a>.{map_todo}</p>
+  <div class="map"><iframe src="{e(map_embed)}" title="Map showing Sapphire Stayss in Mangalam, Yelagiri" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+  <p class="small-print" style="margin-top:14px">{e(B['landmark'])} Coming by road? Read the routes <a href="{p}yelagiri-from-bangalore.html">from Bangalore</a> and <a href="{p}yelagiri-from-chennai.html">from Chennai</a>.{map_todo}</p>
 </section>"""
 
 
@@ -1093,7 +1102,7 @@ def legal(title, label, body):
 def terms_body(p):
     return f"""    <p>These terms apply to bookings made directly with {e(B['name'])}, {e(B['address_line'])}, {e(B['region'])} {e(B['postcode'])}, through this website, by phone or on WhatsApp. Bookings made through Booking.com, Agoda or other travel sites are also subject to that site's terms.</p>
     <h2>Bookings and payment</h2>
-    <p>Prices on this website are per room per night in Indian Rupees and include breakfast. Taxes are shown when you book. A booking is confirmed once we receive an advance of {B['advance_percent']}% of the total. The balance is paid at check-in.</p>
+    <p>Prices on this website are per room per night in Indian Rupees and include breakfast and GST. A booking is confirmed once we receive an advance of {B['advance_percent']}% of the total. The balance is paid at check-in.</p>
     <p>Online payments are processed securely by our payment partner. We do not see or store your card details.</p>
     <h2>Cancellations and refunds</h2>
     <p>See our <a href="{p}refund-policy.html">cancellation &amp; refund policy</a>.</p>
@@ -1181,9 +1190,11 @@ def llms_txt():
                         for it in sorted(DATA["places"]["list"], key=lambda x: x["km"]))
     extra = []
     if B["pool"]:
-        extra.append(f"- Swimming pool: {B['pool']}")
+        extra.append("- No swimming pool." if B["pool"] == "no" else f"- Swimming pool: {B['pool']}")
     if B["pets"]:
-        extra.append(f"- Pets: {B['pets']}")
+        extra.append("- Pets are not allowed." if B["pets"] == "no" else f"- Pets: {B['pets']}")
+    if B["prices_include_gst"]:
+        extra.append(f"- Prices include GST. {B['rate_note']}")
     extra = ("\n" + "\n".join(extra)) if extra else ""
     return f"""# {B['name']}
 
@@ -1192,10 +1203,11 @@ def llms_txt():
 ## Location
 - Address: {B['name']}, {B['address_line']}, {B['region']} {B['postcode']}, India
 - Map: {B['maps_url']}
-- From Bangalore: {bl['km']}, {bl['time']} by car via Hosur, Krishnagiri and Vaniyambadi. {url('yelagiri-from-bangalore.html')}
-- From Chennai: {ch['km']}, {ch['time']} by car via Vellore, Ambur and Vaniyambadi. {url('yelagiri-from-chennai.html')}
+- From Bangalore: {bl['km']} by road to the resort, {bl['time']} by car via Hosur, Krishnagiri and Vaniyambadi. {url('yelagiri-from-bangalore.html')}
+- From Chennai: {ch['km']} by road to the resort, {ch['time']} by car via Vellore, Ambur and Vaniyambadi. {url('yelagiri-from-chennai.html')}
 - The last stretch is the Yelagiri ghat road from Ponneri, with {TRAVEL['ghat']['hairpins']} hairpin bends.
-- Nearest railway station: {st['name']}, {st['km']}.
+- Nearest railway station: {st['name']}, {st['km']} from Yelagiri. No station pickup; taxis and autos are available.
+- Last turn: {B['landmark']}
 
 ## Rooms
 {rooms}
