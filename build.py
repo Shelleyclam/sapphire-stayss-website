@@ -66,6 +66,29 @@ def short(room):
     return room.get("short_name", room["name"])
 
 
+TRAVEL = DATA["travel"]
+
+
+def todo(text):
+    """A fact the owner still has to give us. Shown as a yellow mark so it can't ship unnoticed;
+    main() lists every one left after the build."""
+    return f'<mark class="todo">TODO: {text}</mark>'
+
+
+def site_alt(cap):
+    """Alt text that says where the photo is, for search engines and screen readers."""
+    return cap if ("Sapphire" in cap or "Yelagiri" in cap) else f"{cap}, Sapphire Stayss, Yelagiri"
+
+
+def nap(sep=",<br>"):
+    """Name, address and phones: the same wording on every page."""
+    return (f"{e(B['name'])}{sep}{e(B['address_line'])}{sep}{e(B['region'])} {e(B['postcode'])}, India")
+
+
+def travel_check():
+    return "" if TRAVEL["verified"] else " " + todo("check this distance and time against your own Google Maps route to the resort")
+
+
 def img_size(name):
     if not Image:
         return ""
@@ -103,7 +126,7 @@ NAV = [
     ("rooms.html", "Rooms", "rooms"),
     ("gallery.html", "Gallery", "gallery"),
     ("explore.html", "Explore Yelagiri", "explore"),
-    ("policies.html", "Policies & FAQ", "policies"),
+    ("faq.html", "FAQ", "faq"),
     ("contact.html", "Contact", "contact"),
 ]
 
@@ -127,12 +150,24 @@ def header(p, current):
 </header>"""
 
 
+def book_band(p):
+    """Booking call-to-action shown above the footer on every page."""
+    return f"""<section class="book-band" aria-labelledby="book-band-title">
+  <div class="wrap">
+    <h2 id="book-band-title">Book your stay in Yelagiri</h2>
+    <p>Call or WhatsApp <a href="tel:+{B['phone_whatsapp_raw']}">{e(B['phone_whatsapp'])}</a> or <a href="tel:+{B['phone_other_raw']}">{e(B['phone_other'])}</a>, or email <a href="mailto:{e(B['email'])}">{e(B['email'])}</a>.</p>
+    <div class="btn-row"><a class="btn" href="{wa('Hi, I would like to book a stay at Sapphire Stayss.')}" target="_blank" rel="noopener">WhatsApp us</a><a class="btn btn-line" href="{book_href(p)}">Check availability</a></div>
+  </div>
+</section>"""
+
+
 def footer(p):
-    return f"""<footer class="site-footer">
+    return f"""{book_band(p)}
+<footer class="site-footer">
   <div class="wrap foot">
     <div>
       <img src="{p}img/logo.png" alt="Sapphire Stayss" width="600" height="135" loading="lazy">
-      <p>{e(B['address_line'])},<br>{e(B['region'])} {e(B['postcode'])}</p>
+      <address>{nap()}</address>
     </div>
     <div>
       <h2>Contact</h2>
@@ -147,8 +182,10 @@ def footer(p):
       <ul>
         <li><a href="{p}rooms.html">Rooms &amp; prices</a></li>
         <li><a href="{p}gallery.html">Gallery</a></li>
-        <li><a href="{p}explore.html">Explore Yelagiri</a></li>
-        <li><a href="{p}policies.html">Policies &amp; FAQ</a></li>
+        <li><a href="{p}explore.html">Things to do in Yelagiri</a></li>
+        <li><a href="{p}faq.html">Policies &amp; FAQ</a></li>
+        <li><a href="{p}yelagiri-from-bangalore.html">From Bangalore</a></li>
+        <li><a href="{p}yelagiri-from-chennai.html">From Chennai</a></li>
       </ul>
     </div>
     <div>
@@ -156,6 +193,7 @@ def footer(p):
       <ul>
         <li><a href="{e(B['instagram'])}" target="_blank" rel="noopener">Instagram</a></li>
         <li><a href="{e(B['maps_url'])}" target="_blank" rel="noopener">Google Maps &amp; reviews</a></li>
+        <li><a href="{p}about.html">About us</a></li>
       </ul>
     </div>
   </div>
@@ -174,13 +212,27 @@ LIGHTBOX = """<div class="lightbox" id="lightbox" hidden role="dialog" aria-moda
 </div>"""
 
 
-def page(path, title, description, content, current="", jsonld=None, image="home/hero-swamymalai", lightbox=False):
+def url(path):
+    return B["site_url"] + "/" + ("" if path == "index.html" else path)
+
+
+def breadcrumbs(trail):
+    """trail: [(name, path), ...] after Home."""
+    items = [("Home", "index.html")] + trail
+    return {"@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": i + 1, "name": n, "item": url(u)} for i, (n, u) in enumerate(items)]}
+
+
+def page(path, title, description, content, current="", jsonld=None, crumbs=None, image="home/hero-swamymalai",
+         lightbox=False, head_extra=""):
     depth = path.count("/")
     p = "../" * depth
-    canonical = B["site_url"] + "/" + ("" if path == "index.html" else path)
-    ld = ""
-    if jsonld:
-        ld = '\n<script type="application/ld+json">' + json.dumps(jsonld, ensure_ascii=False) + "</script>"
+    canonical = url(path)
+    graph = [hotel_jsonld()] + (jsonld or [])
+    if crumbs:
+        graph.append(breadcrumbs(crumbs))
+    ld = ('\n<script type="application/ld+json">' +
+          json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False) + "</script>")
     doc = f"""<!doctype html>
 <html lang="en">
 <head>
@@ -201,7 +253,7 @@ def page(path, title, description, content, current="", jsonld=None, image="home
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@400;500&display=swap">
-<link rel="stylesheet" href="{p}css/style.css?v={version('css/style.css')}">{ld}
+<link rel="stylesheet" href="{p}css/style.css?v={version('css/style.css')}">{head_extra}{ld}
 </head>
 <body data-booking-url="{e(BOOKING_URL)}" data-whatsapp="{B['phone_whatsapp_raw']}">
 <!-- Generated by build.py from content/site.json. Edit those, not this file. -->
@@ -241,19 +293,37 @@ def room_card(p, room, in_strip=True):
     sizes = "(max-width: 560px) 80vw, 360px" if in_strip else "(max-width: 560px) 100vw, (max-width: 920px) 50vw, 400px"
     summary = "" if in_strip else f'\n      <p class="summary">{e(room["summary"])}</p>'
     return f"""<a class="room-card" href="{p}rooms/{room['slug']}.html">
-      <div class="img">{img(p, photo, alt, sizes)}</div>
+      <div class="img">{img(p, photo, site_alt(alt), sizes)}</div>
       <span class="room-tag">{e(room['tag'])}</span>
       <div class="room-top"><h3>{e(short(room) if in_strip else room['name'])}</h3></div>{summary}
       <div class="room-meta"><span>{e(room['beds_short'])} · {e(sleeps(room))}</span><b>{rupees(room['price'])}</b></div>
     </a>"""
 
 
+HOTEL_ID = B["site_url"] + "/#hotel"
+
+
+def amenities():
+    """Hotel amenities for the schema and llms.txt. The pool is only listed once the owner confirms it."""
+    names = DATA["room_amenities"] + ["Garden", "Glass-walled dining room", "Children's swing"]
+    if B["pool"]:
+        names.append("Swimming pool")
+    return names
+
+
 def hotel_jsonld():
     prices = [r["price"] for r in ROOMS]
-    return {
-        "@context": "https://schema.org",
+    geo = B["geo"]
+    extra = {}
+    if geo["latitude"] and geo["longitude"]:
+        extra["geo"] = {"@type": "GeoCoordinates", "latitude": geo["latitude"], "longitude": geo["longitude"]}
+    h = {
         "@type": "Hotel",
+        "@id": HOTEL_ID,
         "name": B["name"],
+        "description": ("A small garden resort with " + str(sum(r["units"] for r in ROOMS)) +
+                        " rooms in Mangalam, Yelagiri Hills, Tamil Nadu, at the foot of Swamymalai. "
+                        "Air-conditioned rooms and a private villa, complimentary South Indian breakfast, free Wi-Fi and parking."),
         "slogan": B["tagline"],
         "url": B["site_url"] + "/",
         "image": [B["site_url"] + "/img/home/hero-swamymalai.webp", B["site_url"] + "/img/home/evening-exterior.webp"],
@@ -268,32 +338,68 @@ def hotel_jsonld():
             "postalCode": B["postcode"],
             "addressCountry": B["country"],
         },
+        **extra,
         "hasMap": B["maps_url"],
-        "sameAs": [B["instagram"]],
+        "sameAs": [B["instagram"]] + [u for u in [B["google_business_url"]] + B["same_as"] if u],
         "priceRange": f"{rupees(min(prices))} – {rupees(max(prices))} per night",
         "currenciesAccepted": "INR",
         "checkinTime": "12:00",
         "checkoutTime": "12:00",
         "numberOfRooms": sum(r["units"] for r in ROOMS),
+        "petsAllowed": {"yes": True, "no": False}.get(B["pets"].lower()) if B["pets"] else None,
         "amenityFeature": [
-            {"@type": "LocationFeatureSpecification", "name": n, "value": True}
-            for n in ["Free Wi-Fi", "Free parking", "Air-conditioning", "Complimentary breakfast", "Garden"]
+            {"@type": "LocationFeatureSpecification", "name": n, "value": True} for n in amenities()
         ],
+    }
+    return {k: v for k, v in h.items() if v is not None}
+
+
+def room_jsonld(room):
+    return {
+        "@type": "HotelRoom",
+        "@id": url(f"rooms/{room['slug']}.html") + "#room",
+        "name": room["name"],
+        "url": url(f"rooms/{room['slug']}.html"),
+        "description": room["summary"],
+        "bed": room["beds"],
+        "floorSize": {"@type": "QuantitativeValue", "value": room["size_m2"], "unitCode": "MTK"},
+        "occupancy": {"@type": "QuantitativeValue", "maxValue": room["adults"],
+                      "description": f"Up to {room['adults']} adults and {room['children']} children"},
+        "amenityFeature": [{"@type": "LocationFeatureSpecification", "name": n, "value": True}
+                           for n in room["features"] + DATA["room_amenities"]],
+        "image": B["site_url"] + f"/img/{room['photos'][0][0]}.webp",
+        "containedInPlace": {"@id": HOTEL_ID},
+        "offers": {
+            "@type": "Offer",
+            "url": url(f"rooms/{room['slug']}.html"),
+            "priceCurrency": "INR",
+            "price": room["price"],
+            "priceSpecification": {"@type": "UnitPriceSpecification", "price": room["price"],
+                                   "priceCurrency": "INR", "unitText": "per night, breakfast included"},
+            "seller": {"@id": HOTEL_ID},
+        },
     }
 
 
 # ---------------------------------------------------------------- Home
 
+def review_by(r):
+    """'Vasy · Chennai · March 2026 · Google', skipping whatever we don't have."""
+    return " · ".join(e(x) for x in [r["name"], r.get("city"), r.get("month"), r["source"]] if x)
+
+
 def home(p):
     cards = "\n    ".join(room_card(p, r) for r in ROOMS)
     rv = DATA["reviews"]
     more = "\n      ".join(
-        f'<figure><blockquote>“{e(r["quote"])}”</blockquote><figcaption>{e(r["name"])} · {e(r["source"])}</figcaption></figure>'
-        for r in rv[1:4]
+        f'<figure><blockquote>“{e(r["quote"])}”</blockquote><figcaption>{review_by(r)}</figcaption></figure>'
+        for r in rv[1:]
     )
+    review_us = (f'<a class="link" href="{e(B["google_review_url"])}" target="_blank" rel="noopener">Review us on Google</a>'
+                 if B["google_review_url"] else todo("add your Google review link (google_review_url) for a “Review us on Google” button"))
     stops = [(0, "Sapphire Stayss", True), (0.5, "Swamymalai trek starts, right behind us", False),
              (1, "Selfie Panda &amp; Chocolate Factory", False), (1.5, "Murugan (Velavan) Temple", False),
-             (2, "Fundura Park", False), (2.5, "Nilavoor View Point", False),
+             (2, "Fundera Park", False), (2.5, "Nilavoor View Point", False),
              (3.5, "Boat House &amp; Nature Park", False), (4, "Mountain View Adventure Park", False)]
     road = "\n        ".join(
         f'<div class="stop{" home" if h else ""}" style="top:{int(d * 60)}px"><b>{"0 km" if d == 0 else km(d)}</b>{label}</div>'
@@ -302,8 +408,7 @@ def home(p):
     return f"""<div class="wrap">
   <section class="hero" aria-label="Welcome">
     <div class="hero-text">
-      <span class="label">Yelagiri Hills · Tamil Nadu</span>
-      <h1>Where serenity reigns</h1>
+      <h1><span class="label">Sapphire Stayss · Resort in Yelagiri Hills, Tamil Nadu</span>Where serenity reigns</h1>
       <p>Tucked away in Mangalam at the foot of Swamymalai, Yelagiri's highest hill, with green slopes all around, cool air and a calm you can hear.</p>
     </div>
     <figure class="hero-photo">
@@ -419,22 +524,24 @@ def home(p):
 <section class="wrap section tight-top reviews" id="reviews" aria-label="Guest reviews">
   <span class="label">Guests on Google &amp; Tripadvisor</span>
   <p class="quote">“{e(rv[0]['quote'])}”</p>
-  <p class="quote-by">{e(rv[0]['name'])} · {e(rv[0]['source'])}</p>
+  <p class="quote-by">{review_by(rv[0])}</p>
   <div class="more-quotes">
       {more}
   </div>
-  <a class="link" href="{e(B['maps_url'])}" target="_blank" rel="noopener">All reviews on Google</a>
+  <p class="small-print">{todo("paste more real guest reviews into content/site.json → reviews, with first name, city and month of stay (quote, name, city, month, source). Only real reviews, copied word for word.")}</p>
+  <div class="btn-row" style="justify-content:center"><a class="link" href="{e(B['maps_url'])}" target="_blank" rel="noopener">All reviews on Google</a>{review_us}</div>
 </section>
 
 <section class="wrap section tight-top where" id="where" aria-labelledby="where-title">
   <div>
     <span class="label">Location</span>
     <h2 class="big" id="where-title">Mangalam, Yelagiri</h2>
-    <address>{e(B['address_line'])}, {e(B['region'])} {e(B['postcode'])}</address>
+    <address>{nap(", ")}</address>
     <div class="btn-row">
       <a class="btn btn-line" href="{e(B['maps_url'])}" target="_blank" rel="noopener">Get directions</a>
       <a class="link" href="{p}explore.html">Things to do</a>
     </div>
+    <p class="small-print">Driving up? See the routes <a href="{p}yelagiri-from-bangalore.html">from Bangalore</a> ({e(TRAVEL['bangalore']['km'])}) and <a href="{p}yelagiri-from-chennai.html">from Chennai</a> ({e(TRAVEL['chennai']['km'])}).</p>
   </div>
   <div>
     <span class="label">From our gate, to scale</span>
@@ -451,15 +558,34 @@ def home(p):
 def rooms_page(p):
     cards = "\n    ".join(room_card(p, r, in_strip=False) for r in ROOMS)
     amen = "".join(f"<li>{e(a)}</li>" for a in DATA["room_amenities"])
+    rows = "\n      ".join(
+        f'<tr><th scope="row"><a href="{p}rooms/{r["slug"]}.html">{e(r["name"])}</a></th><td>{e(r["beds"])}</td>'
+        f'<td>{r["adults"]} adults + {r["children"]} {"child" if r["children"] == 1 else "children"}</td>'
+        f'<td>{r["size_m2"]} m² ({r["size_sqft"]} sq ft)</td><td>{e(r["views"])}</td><td>{r["units"]}</td>'
+        f'<td>From {rupees(r["price"])}</td></tr>'
+        for r in ROOMS)
+    total = sum(r["units"] for r in ROOMS)
     return f"""<section class="wrap page-head">
   <span class="label">Stay</span>
-  <h1>Rooms &amp; prices</h1>
-  <p>Every stay includes breakfast.</p>
+  <h1>Rooms &amp; prices in Yelagiri</h1>
+  <p>{total} rooms in {len(ROOMS)} types at Sapphire Stayss, Mangalam, Yelagiri, from {rupees(min(r['price'] for r in ROOMS))} to {rupees(max(r['price'] for r in ROOMS))} a night. Every stay includes breakfast.</p>
 </section>
 <section class="wrap section">
   <div class="room-grid">
     {cards}
   </div>
+</section>
+<section class="wrap section tight-top" aria-labelledby="compare-title">
+  <h2 class="big" id="compare-title" style="margin-bottom:20px">Compare the rooms</h2>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th scope="col">Room</th><th scope="col">Beds</th><th scope="col">Sleeps</th><th scope="col">Size</th><th scope="col">View</th><th scope="col">Rooms</th><th scope="col">Per night</th></tr></thead>
+      <tbody>
+      {rows}
+      </tbody>
+    </table>
+  </div>
+  <p class="small-print" style="margin-top:14px">Prices are per room per night in Indian Rupees and include breakfast for every guest. {todo("say whether these prices include GST, and whether weekend or holiday rates are higher")}</p>
 </section>
 <section class="wrap section tight-top">
   <div class="highlight-box">
@@ -469,7 +595,7 @@ def rooms_page(p):
     </div>
     <div>
       <p>Check-in and check-out are at {B['check_in']}. A {B['advance_percent']}% advance confirms your booking and the rest is paid at check-in. Free cancellation up to {B['free_cancellation_days']} days before arrival.</p>
-      <p style="margin-top:18px"><a class="link" href="{p}policies.html">Policies &amp; FAQ</a></p>
+      <p style="margin-top:18px"><a class="link" href="{p}faq.html">Policies &amp; FAQ</a></p>
     </div>
   </div>
 </section>"""
@@ -478,7 +604,7 @@ def rooms_page(p):
 def room_page(room):
     def content(p):
         btns = "\n      ".join(
-            f'<button type="button" data-lightbox="room" data-full="{p}img/{ph}.webp">{img(p, ph, alt, "(max-width: 920px) 100vw, 60vw" if i == 0 else "(max-width: 920px) 50vw, 30vw", lazy=i > 0)}</button>'
+            f'<button type="button" data-lightbox="room" data-full="{p}img/{ph}.webp" data-caption="{e(alt)}">{img(p, ph, site_alt(alt), "(max-width: 920px) 100vw, 60vw" if i == 0 else "(max-width: 920px) 50vw, 30vw", lazy=i > 0)}</button>'
             for i, (ph, alt) in enumerate(room["photos"])
         )
         feats = "".join(f"<li>{e(x)}</li>" for x in room["features"] + DATA["room_amenities"])
@@ -500,12 +626,13 @@ def room_page(room):
       <div class="price-big">{rupees(room['price'])}<small>per night, breakfast included</small></div>
       <dl class="spec">
         <div><dt>Beds</dt><dd>{e(room['beds'])}</dd></div>
-        <div><dt>Sleeps</dt><dd>Up to {e(sleeps(room))}</dd></div>
+        <div><dt>Sleeps</dt><dd>Up to {e(sleeps(room))} and {room['children']} {"child" if room['children'] == 1 else "children"}</dd></div>
+        <div><dt>Size</dt><dd>{room['size_m2']} m² ({room['size_sqft']} sq ft)</dd></div>
         <div><dt>View</dt><dd>{e(room['views'])}</dd></div>
         {units}
       </dl>
       {availability_form(p, room, boxed=True)}
-      <p class="small-print">{B['advance_percent']}% advance to confirm, balance at check-in. Free cancellation up to {B['free_cancellation_days']} days before arrival. <a href="{p}policies.html">Policies</a></p>
+      <p class="small-print">{B['advance_percent']}% advance to confirm, balance at check-in. Free cancellation up to {B['free_cancellation_days']} days before arrival. <a href="{p}faq.html">Policies</a></p>
     </aside>
   </div>
 </section>
@@ -544,12 +671,12 @@ def gallery_page(p):
         shape = "big" if cat not in seen else orientation(name)
         seen.add(cat)
         figs.append(
-            f'<figure class="{shape}" data-cat="{cat}"><button type="button" data-lightbox="gallery" data-full="{p}img/{name}.webp" aria-label="View larger: {e(cap)}">'
-            f'{img(p, name, cap, "(max-width: 700px) 50vw, 33vw")}</button><figcaption>{e(cap)}</figcaption></figure>')
+            f'<figure class="{shape}" data-cat="{cat}"><button type="button" data-lightbox="gallery" data-full="{p}img/{name}.webp" data-caption="{e(cap)}" aria-label="View larger: {e(cap)}">'
+            f'{img(p, name, site_alt(cap), "(max-width: 700px) 50vw, 33vw")}</button><figcaption>{e(cap)}</figcaption></figure>')
     figs = "\n    ".join(figs)
     return f"""<section class="wrap page-head">
   <span class="label">Gallery</span>
-  <h1>Around the property</h1>
+  <h1>Photos of Sapphire Stayss</h1>
   <p>The garden, the rooms, breakfast and our evenings. Tap any photo to see it larger.</p>
 </section>
 <section class="wrap section">
@@ -612,8 +739,8 @@ def explore_page(p):
     trek_dir = ("https://www.google.com/maps/dir/?api=1&origin=" + quote(ORIGIN) + "&destination=" + quote(trek["maps"]))
     return f"""<section class="wrap page-head">
   <span class="label">Explore Yelagiri</span>
-  <h1>Things to do nearby</h1>
-  <p>Most of Yelagiri's lakes, parks, temples and viewpoints are within 4 km of Sapphire Stayss. Pick what you are in the mood for, or the time of day, and we will show you what fits. Distances are by road from our gate.</p>
+  <h1>Things to do in Yelagiri</h1>
+  <p>Most of Yelagiri's lakes, parks, temples and viewpoints are within 4 km of Sapphire Stayss in Mangalam. Pick what you are in the mood for, or the time of day, and we will show you what fits. Distances are by road from our gate.</p>
 </section>
 <section class="wrap section">
   <div class="highlight-box">
@@ -641,10 +768,19 @@ def explore_page(p):
 </section>
 <section class="wrap section tight-top">
   <div class="split-head">
-    <div><h2 class="big">Getting here</h2><p class="lead">We are in Mangalam, Yelagiri. Open the map for directions from Chennai, Bengaluru or Jolarpettai.</p></div>
+    <div><h2 class="big">Getting here</h2><p class="lead">We are in Mangalam, Yelagiri. Read the driving guides <a href="{p}yelagiri-from-bangalore.html">from Bangalore</a> and <a href="{p}yelagiri-from-chennai.html">from Chennai</a>, or open the map for directions.</p></div>
     <a class="btn" href="{e(B['maps_url'])}" target="_blank" rel="noopener">Open in Google Maps</a>
   </div>
 </section>"""
+
+
+def explore_jsonld():
+    items = sorted(DATA["places"]["list"], key=lambda x: (not x.get("must"), x["km"]))
+    return [{"@type": "ItemList", "name": "Things to do in Yelagiri near Sapphire Stayss", "itemListElement": [
+        {"@type": "ListItem", "position": i + 1, "item": {
+            "@type": "TouristAttraction", "name": it["name"],
+            "description": f"{it['about']} {km(it['km'])} by road from Sapphire Stayss. Best time: {it['best']}. Time needed: {it['duration']}."}}
+        for i, it in enumerate(items)]}]
 
 
 # ---------------------------------------------------------------- About
@@ -656,10 +792,28 @@ ABOUT_SHORT = ("Sapphire Stayss is a small, quiet stay at the foot of Swamymalai
 
 def about_page(p):
     rv = DATA["reviews"][0]
+    A = B["about"]
+    run_by = e(A["run_by"]) if A["run_by"] else todo("who runs Sapphire Stayss (the hosts' names)")
+    since = e(A["since"]) if A["since"] else todo("the year you started hosting guests")
+    story = f"<p>{e(A['story'])}</p>" if A["story"] else f"<p>{todo('two or three lines in your own words: why you started Sapphire Stayss and what makes it different')}</p>"
     return f"""<section class="wrap page-head">
   <span class="label">About us</span>
-  <h1>A small stay, looked after personally</h1>
+  <h1>About Sapphire Stayss</h1>
   <p>{e(ABOUT_SHORT)}</p>
+</section>
+<section class="wrap section">
+  <dl class="policy-grid">
+    <div><dt>Hosts</dt><dd>{run_by}</dd></div>
+    <div><dt>Hosting since</dt><dd>{since}</dd></div>
+    <div><dt>Rooms</dt><dd>{sum(r['units'] for r in ROOMS)} rooms, including a private villa</dd></div>
+    <div><dt>Where</dt><dd>Mangalam, Yelagiri, at the foot of Swamymalai</dd></div>
+  </dl>
+</section>
+<section class="wrap section tight-top">
+  <div class="prose">
+    <h2>Our story</h2>
+    {story}
+  </div>
 </section>
 <section class="wrap section">
   <div class="about-band">
@@ -682,41 +836,71 @@ def about_page(p):
 <section class="wrap section tight-top reviews">
   <span class="label">In our guests' words</span>
   <p class="quote">“{e(rv['quote'])}”</p>
-  <p class="quote-by">{e(rv['name'])} · {e(rv['source'])}</p>
+  <p class="quote-by">{review_by(rv)}</p>
   <div class="btn-row" style="justify-content:center;margin-top:30px"><a class="btn" href="{book_href(p)}">Plan your stay</a><a class="btn btn-line" href="{p}rooms.html">See the rooms</a></div>
 </section>"""
 
 
 # ---------------------------------------------------------------- Policies & FAQ
 
-FAQ = [
-    ("What are the check-in and check-out times?",
-     f"Check-in and check-out are both at {B['check_in']}. If you need an early check-in or late check-out, message us and we will try to arrange it."),
-    ("Is breakfast included?",
-     f"Yes. A South Indian breakfast is complimentary for every guest, including anyone on an extra mattress. It is served {B['breakfast_time']}."),
-    ("How do I pay?",
-     f"For bookings made on this website, a {B['advance_percent']}% advance confirms your room. You pay the balance at check-in. Bookings made on Booking.com, Agoda or other sites follow the payment terms shown on that site."),
-    ("What is the cancellation policy?",
-     f"Cancel up to {B['free_cancellation_days']} days before your check-in date and we refund your advance in full. If you cancel later than that, or do not arrive, the advance is not refunded."),
-    ("Can I add an extra bed?",
-     "Yes. We can add an extra mattress, and breakfast is included for the extra guest. Ask us for the price."),
-    ("How many people can stay in a room?",
-     "Each double bed sleeps two adults and one child, and the single bed sleeps one. Every room page shows the maximum number of guests."),
-    ("Who counts as a child?",
-     f"Children {B['child_age']} years count as children. Guests aged 6 and over count as adults."),
-    ("Do you serve lunch or dinner?",
-     "We do not run a restaurant, but we can order lunch or dinner for you from a good local restaurant and serve it at the property. Let us know in advance."),
-    ("Can you arrange a campfire, cake or decoration?",
-     "Yes. Campfires, birthday or anniversary cakes and room decoration can be arranged if you ask at least a day ahead. Message us for prices."),
-    ("Is there parking and Wi-Fi?",
-     "Yes, both are free. Parking is inside the property."),
-    ("What ID do I need?",
-     "All adult guests need a valid government photo ID, such as an Aadhaar card, passport, driving licence or voter ID, at check-in."),
-]
+def faq_items(p):
+    """(question, answer HTML). Answers holding a TODO are shown on the page but left out of the FAQPage schema."""
+    bl, ch, st = TRAVEL["bangalore"], TRAVEL["chennai"], TRAVEL["station"]
+    pool = (f"Yes. {e(B['pool'])}" if B["pool"] else
+            todo("say whether there is a swimming pool and, if so, its timings and rules. Until then the pool is left out of the site and the schema"))
+    pets = e(B["pets"]) if B["pets"] else todo("say whether pets are allowed, and on what conditions")
+    pickup = (f" {e(B['station_pickup'])}" if B["station_pickup"] else
+              " " + todo("say whether you can arrange a taxi or pickup from Jolarpettai station, and the cost"))
+    return [
+        ("What are the check-in and check-out times?",
+         f"Check-in and check-out are both at {B['check_in']}. If you need an early check-in or late check-out, message us and we will try to arrange it."),
+        ("How far is Sapphire Stayss from Bangalore?",
+         f"Yelagiri is {e(bl['km'])} from Bengaluru, usually {e(bl['time'])} by car, via Hosur, Krishnagiri and Vaniyambadi, then up the ghat road from Ponneri.{travel_check()} "
+         f'See <a href="{p}yelagiri-from-bangalore.html">how to reach Yelagiri from Bangalore</a>.'),
+        ("How far is Sapphire Stayss from Chennai?",
+         f"Yelagiri is {e(ch['km'])} from Chennai, usually {e(ch['time'])} by car, on the Chennai–Bengaluru highway via Vellore, Ambur and Vaniyambadi, then up the ghat road from Ponneri.{travel_check()} "
+         f'See <a href="{p}yelagiri-from-chennai.html">how to reach Yelagiri from Chennai</a>.'),
+        ("What is the nearest railway station?",
+         f"{e(st['name'])}, {e(st['km'])} from Yelagiri by road. From the station you can take a taxi up the ghat road.{pickup}"),
+        ("Is breakfast included?",
+         f"Yes. A South Indian breakfast is complimentary for every guest, including anyone on an extra mattress. It is served {B['breakfast_time']} in our glass-walled dining room."),
+        ("Do you serve lunch or dinner?",
+         "We do not run a restaurant, but we can order lunch or dinner for you from a good local restaurant and serve it at the property. Let us know in advance."),
+        ("Is there a swimming pool?", pool),
+        ("Are pets allowed?", pets),
+        ("Can I bring children or add an extra bed?",
+         f"Yes. Children {B['child_age']} years count as children; guests aged 6 and over count as adults. Each double bed sleeps two adults and one child, and the single bed sleeps one. "
+         f'We can add an extra mattress, and breakfast is included for the extra guest; ask us for the price. Every <a href="{p}rooms.html">room page</a> shows the maximum number of guests.'),
+        ("Is there parking and Wi-Fi?",
+         "Yes, both are free. Parking is inside the property."),
+        ("What is the cancellation policy?",
+         f'Cancel up to {B["free_cancellation_days"]} days before your check-in date and we refund your advance in full. If you cancel later than that, or do not arrive, the advance is not refunded. '
+         f'Bookings on Booking.com, Agoda or other sites follow that site\'s terms. Read the <a href="{p}refund-policy.html">cancellation &amp; refund policy</a>.'),
+        ("How do I book?",
+         f'WhatsApp or call us on <a href="tel:+{B["phone_whatsapp_raw"]}">{e(B["phone_whatsapp"])}</a> or <a href="tel:+{B["phone_other_raw"]}">{e(B["phone_other"])}</a>, '
+         f'email <a href="mailto:{e(B["email"])}">{e(B["email"])}</a>, or send your dates through our <a href="{book_href(p)}">booking form</a>. '
+         f"A {B['advance_percent']}% advance confirms your room and you pay the balance at check-in."),
+        ("What ID do I need?",
+         "All adult guests need a valid government photo ID, such as an Aadhaar card, passport, driving licence or voter ID, at check-in."),
+        ("Can you arrange a campfire, cake or decoration?",
+         "Yes. Campfires, birthday or anniversary cakes and room decoration can be arranged if you ask at least a day ahead. There is an extra charge; message us for prices."),
+        ("When is the best time to visit Yelagiri?",
+         "Most visitors find November to February the most pleasant, with cool weather. March to May is the warmest time of year, and the "
+         "Tamil Nadu tourism department's summer festival is usually held in May. July to September brings the monsoon rains. "
+         "Jalagamparai Waterfalls, a half-day trip, is fullest from October to February."),
+    ]
 
 
-def policies_page(p):
-    faq = "\n  ".join(f"<details><summary>{e(q)}</summary><p>{e(a)}</p></details>" for q, a in FAQ)
+def faq_jsonld():
+    import re
+    return [{"@type": "FAQPage", "mainEntity": [
+        {"@type": "Question", "name": q,
+         "acceptedAnswer": {"@type": "Answer", "text": html.unescape(re.sub(r"<[^>]+>", "", a))}}
+        for q, a in faq_items("") if 'class="todo"' not in a]}]
+
+
+def faq_page(p):
+    faq = "\n  ".join(f"<details><summary>{e(q)}</summary><p>{a}</p></details>" for q, a in faq_items(p))
     return f"""<section class="wrap page-head">
   <span class="label">Good to know</span>
   <h1>Policies &amp; FAQ</h1>
@@ -743,13 +927,108 @@ def policies_page(p):
 </section>"""
 
 
+def moved_page(target):
+    """Old address kept for the preview host, which can't do redirects. On GoDaddy, .htaccess redirects it first."""
+    def content(p):
+        return f"""<section class="wrap page-head" style="border-bottom:0">
+  <span class="label">This page has moved</span>
+  <h1>Policies &amp; FAQ</h1>
+  <p>This page is now at <a href="{p}{target}">{target}</a>.</p>
+</section>"""
+    return content
+
+
+# ---------------------------------------------------------------- How to reach
+
+def route_page(city):
+    t = TRAVEL[city]
+    name = {"bangalore": "Bangalore", "chennai": "Chennai"}[city]
+    if city == "bangalore":
+        intro = (f"Yelagiri is {e(t['km'])} from Bengaluru, an easy weekend drive of {e(t['time'])}. "
+                 "Most of it is on the national highway; only the last stretch climbs the hills.")
+        steps = [
+            ("Bengaluru to Krishnagiri", "Leave the city on the Hosur Road (NH 44) to Hosur, just inside Tamil Nadu and about 40 km out, and carry on to Krishnagiri, about 90 km from Bengaluru and a good place for a break."),
+            ("Krishnagiri to Vaniyambadi", "At Krishnagiri, take NH 48 towards Chennai and drive on towards Vaniyambadi."),
+            ("Up to Yelagiri", "Leave the highway near Vaniyambadi and follow the signs for Yelagiri through Ponneri, where the ghat road starts. Google Maps will show you the exact turn."),
+        ]
+        other = ("chennai", "Chennai")
+    else:
+        intro = (f"Yelagiri is {e(t['km'])} from Chennai, a drive of {e(t['time'])}. "
+                 "Almost all of it is on the Chennai–Bengaluru highway; only the last stretch climbs the hills.")
+        steps = [
+            ("Chennai to Vellore", "Leave Chennai on NH 48 (the Bengaluru highway) through Poonamallee, Sriperumbudur and Walajapet to Vellore. Vellore, with its fort, is a good place for a break."),
+            ("Vellore to Vaniyambadi", "Stay on NH 48 through Ambur, known for its biryani, to Vaniyambadi."),
+            ("Up to Yelagiri", "Leave the highway at Vaniyambadi and follow the signs for Yelagiri through Ponneri, where the ghat road starts. Google Maps will show you the exact turn."),
+        ]
+        other = ("bangalore", "Bangalore")
+    g, st = TRAVEL["ghat"], TRAVEL["station"]
+    route = " → ".join(e(x) for x in t["route"])
+    step_html = "\n    ".join(f"<h3>{e(h)}</h3>\n    <p>{e(x)}</p>" for h, x in steps)
+    turn = "" if TRAVEL["verified"] else f"<p>{todo('confirm the highway turn-off and route you tell guests, and any landmark near the resort gate')}</p>"
+
+    def content(p):
+        return f"""<section class="wrap page-head">
+  <p class="crumbs"><a href="{p}index.html">Home</a> / How to reach Yelagiri from {name}</p>
+  <span class="label">Getting here</span>
+  <h1>How to reach Yelagiri from {name}</h1>
+  <p>{intro}</p>
+</section>
+<section class="wrap section">
+  <dl class="policy-grid">
+    <div><dt>Distance</dt><dd>{e(t['km'])}</dd></div>
+    <div><dt>Drive time</dt><dd>{e(t['time'])}</dd></div>
+    <div><dt>Ghat road</dt><dd>{g['hairpins']} hairpin bends from Ponneri</dd></div>
+    <div><dt>By train</dt><dd>{e(st['name'])}, {e(st['km'])}</dd></div>
+  </dl>
+  <p class="small-print" style="margin-top:14px">Distances and times are approximate and depend on traffic.{travel_check()}</p>
+</section>
+<section class="wrap section tight-top">
+  <div class="prose">
+    <h2>The route</h2>
+    <p>{route}</p>
+    {step_html}
+    {turn}
+    <h2>The ghat road</h2>
+    <p>The road up from {e(g['starts'])} climbs through {g['hairpins']} hairpin bends. It is a two-way road, so expect buses and cars coming down as you go up.</p>
+    <ul>
+      <li>Climb in a low gear and use the engine to brake on the way down.</li>
+      <li>Sound your horn before blind bends, and don't overtake on them.</li>
+      <li>If you haven't driven it before, try to arrive in daylight.</li>
+      <li>Fill up on fuel and cash in the plains before you start the climb.</li>
+    </ul>
+    <h2>When you reach Yelagiri</h2>
+    <p>At the top, the air is noticeably cooler than in the plains. Sapphire Stayss is in Mangalam, on the quieter side of Yelagiri at the foot of Swamymalai; open <a href="{e(B['maps_url'])}" target="_blank" rel="noopener">our Google Maps pin</a> for the last few kilometres. Check-in is at {B['check_in']}, so leaving {name} early in the morning gets you here in time to check in and enjoy a full afternoon.</p>
+    <p>Weekends and holidays are busier on the highway and at Yelagiri's lake and parks, so allow extra time.</p>
+    <h2>By train</h2>
+    <p>The nearest railway station is {e(st['name'])}, {e(st['km'])} from Yelagiri. Taxis from the station take the same ghat road up from Ponneri.</p>
+  </div>
+</section>
+<section class="wrap section tight-top">
+  <div class="highlight-box">
+    <div>
+      <h2>Plan your stay</h2>
+      <p>Pick a room, then message us your dates on WhatsApp. Breakfast is included with every stay.</p>
+      <div class="btn-row" style="margin-top:22px"><a class="btn" href="{book_href(p)}">Check availability</a><a class="btn btn-line" href="{p}rooms.html">See the rooms</a></div>
+    </div>
+    <div class="prose">
+      <h3>Once you're here</h3>
+      <p>See <a href="{p}explore.html">things to do in Yelagiri</a>, most within 4 km of the resort. Coming from {other[1]} instead? Read <a href="{p}yelagiri-from-{other[0]}.html">how to reach Yelagiri from {other[1]}</a>.</p>
+    </div>
+  </div>
+</section>"""
+    return content
+
+
 # ---------------------------------------------------------------- Contact
 
 def contact_page(p):
+    from urllib.parse import quote
+    map_embed = B["maps_embed_url"] or ("https://www.google.com/maps?output=embed&q=" + quote(f"{B['name']}, {B['address_line']}, {B['region']} {B['postcode']}"))
+    map_todo = "" if B["maps_embed_url"] else " " + todo("paste the embed link from Google Maps (your listing → Share → Embed a map, the src=\"…\" part) into maps_embed_url so the map shows your exact pin")
     room_options = "".join(f'<option value="{r["slug"]}">{e(r["name"])}</option>' for r in ROOMS)
     return f"""<section class="wrap page-head">
   <span class="label">Contact</span>
-  <h1>Talk to us</h1>
+  <h1>Contact &amp; directions</h1>
   <p>The quickest way to reach us is WhatsApp. We are happy to help with availability, directions and special requests.</p>
 </section>
 <section class="wrap section">
@@ -760,7 +1039,7 @@ def contact_page(p):
         <li><span>Phone</span><a href="tel:+{B['phone_other_raw']}">{e(B['phone_other'])}</a></li>
         <li><span>Email</span><a href="mailto:{e(B['email'])}">{e(B['email'])}</a></li>
         <li><span>Instagram</span><a href="{e(B['instagram'])}" target="_blank" rel="noopener">{e(B['instagram_handle'])}</a></li>
-        <li><span>Address</span><address style="font-style:normal;font-size:19px">{e(B['address_line'])},<br>{e(B['region'])} {e(B['postcode'])}</address></li>
+        <li><span>Address</span><address style="font-style:normal;font-size:19px">{nap()}</address></li>
       </ul>
       <p style="margin-top:22px"><a class="btn btn-line" href="{e(B['maps_url'])}" target="_blank" rel="noopener">Get directions</a></p>
     </div>
@@ -786,6 +1065,11 @@ def contact_page(p):
       </form>
     </div>
   </div>
+</section>
+<section class="wrap section tight-top" aria-labelledby="map-title">
+  <div class="split-head"><h2 class="big" id="map-title">Find us in Mangalam, Yelagiri</h2><a class="btn" href="{e(B['maps_url'])}" target="_blank" rel="noopener">Get directions</a></div>
+  <div class="map"><iframe src="{e(map_embed)}" title="Map showing Sapphire Stayss in Mangalam, Yelagiri" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
+  <p class="small-print" style="margin-top:14px">Coming by road? Read the routes <a href="{p}yelagiri-from-bangalore.html">from Bangalore</a> and <a href="{p}yelagiri-from-chennai.html">from Chennai</a>.{map_todo}</p>
 </section>"""
 
 
@@ -841,7 +1125,7 @@ def privacy_body(p):
     <h2>Who we share it with</h2>
     <p>We share information only with the services needed to run your booking: our booking system, our payment partner, and authorities when the law requires it.</p>
     <h2>This website</h2>
-    <p>This website does not use advertising cookies. Fonts are loaded from Google Fonts. When you tap a WhatsApp button, your message is sent through WhatsApp, which has its own privacy policy.</p>
+    <p>This website does not use advertising cookies. Fonts are loaded from Google Fonts, and the map on the contact page is shown by Google Maps. When you tap a WhatsApp button, your message is sent through WhatsApp, which has its own privacy policy.</p>
     <h2>Your choices</h2>
     <p>You can ask us to see, correct or delete the information we hold about you, unless we must keep it by law. Contact us at <a href="mailto:{e(B['email'])}">{e(B['email'])}</a> or {e(B['phone_whatsapp'])}.</p>"""
 
@@ -874,54 +1158,164 @@ def not_found(p):
 
 # ---------------------------------------------------------------- Build
 
+ROBOTS_ALLOWED = ["Googlebot", "Bingbot", "Google-Extended", "OAI-SearchBot", "ChatGPT-User", "GPTBot",
+                  "PerplexityBot", "Perplexity-User", "ClaudeBot", "Claude-SearchBot", "Claude-User", "Applebot"]
+
+
+def robots_txt():
+    named = "\n".join(f"User-agent: {b}" for b in ROBOTS_ALLOWED)
+    return (f"# Search engines and AI assistants are welcome to read this site.\n{named}\nAllow: /\n\n"
+            f"User-agent: *\nAllow: /\n\nSitemap: {B['site_url']}/sitemap.xml\n")
+
+
+def llms_txt():
+    """Plain-text summary for AI assistants (llmstxt.org). Only confirmed facts; unknowns are left out."""
+    total = sum(r["units"] for r in ROOMS)
+    bl, ch, st = TRAVEL["bangalore"], TRAVEL["chennai"], TRAVEL["station"]
+    rooms = "\n".join(
+        f"- {r['name']}: {r['beds']}; up to {r['adults']} adults and {r['children']} "
+        f"{'child' if r['children'] == 1 else 'children'}; {r['size_m2']} m² ({r['size_sqft']} sq ft); {r['views']}; "
+        f"{r['units']} {'room' if r['units'] == 1 else 'rooms'}; from {rupees(r['price'])} per night with breakfast. {url('rooms/' + r['slug'] + '.html')}"
+        for r in ROOMS)
+    places = "\n".join(f"- {it['name']}: {km(it['km'])} from the resort. {it['about']}"
+                        for it in sorted(DATA["places"]["list"], key=lambda x: x["km"]))
+    extra = []
+    if B["pool"]:
+        extra.append(f"- Swimming pool: {B['pool']}")
+    if B["pets"]:
+        extra.append(f"- Pets: {B['pets']}")
+    extra = ("\n" + "\n".join(extra)) if extra else ""
+    return f"""# {B['name']}
+
+> {B['name']} is a small garden resort with {total} rooms in Mangalam, Yelagiri Hills, Tamil Nadu, India, at the foot of Swamymalai, Yelagiri's highest hill. Rooms from {rupees(min(r['price'] for r in ROOMS))} to {rupees(max(r['price'] for r in ROOMS))} per night, complimentary South Indian breakfast for every guest. Most guests drive up from Bangalore ({bl['km']}) and Chennai ({ch['km']}).
+
+## Location
+- Address: {B['name']}, {B['address_line']}, {B['region']} {B['postcode']}, India
+- Map: {B['maps_url']}
+- From Bangalore: {bl['km']}, {bl['time']} by car via Hosur, Krishnagiri and Vaniyambadi. {url('yelagiri-from-bangalore.html')}
+- From Chennai: {ch['km']}, {ch['time']} by car via Vellore, Ambur and Vaniyambadi. {url('yelagiri-from-chennai.html')}
+- The last stretch is the Yelagiri ghat road from Ponneri, with {TRAVEL['ghat']['hairpins']} hairpin bends.
+- Nearest railway station: {st['name']}, {st['km']}.
+
+## Rooms
+{rooms}
+
+## Amenities
+{chr(10).join('- ' + a for a in amenities())}
+
+## Policies
+- Check-in {B['check_in']}, check-out {B['check_out']}.
+- Breakfast included, served {B['breakfast_time']}. No restaurant; lunch and dinner can be ordered in from local restaurants on request.
+- Direct bookings: {B['advance_percent']}% advance, balance at check-in. Free cancellation up to {B['free_cancellation_days']} days before arrival.
+- Children: {B['child_age']} years. Extra mattress available on request.
+- Valid government photo ID needed for all adults.
+- Campfire, cakes and room decoration on request (extra charge).{extra}
+
+## Contact and booking
+- Phone and WhatsApp: {B['phone_whatsapp']}
+- Phone: {B['phone_other']}
+- Email: {B['email']}
+- WhatsApp link: {wa()}
+- Instagram: {B['instagram']}
+
+## Things to do nearby
+{places}
+
+## Key pages
+- [Home]({url('index.html')})
+- [Rooms and prices]({url('rooms.html')})
+- [Policies and FAQ]({url('faq.html')})
+- [Things to do in Yelagiri]({url('explore.html')})
+- [How to reach Yelagiri from Bangalore]({url('yelagiri-from-bangalore.html')})
+- [How to reach Yelagiri from Chennai]({url('yelagiri-from-chennai.html')})
+- [Gallery]({url('gallery.html')})
+- [About]({url('about.html')})
+- [Contact]({url('contact.html')})
+"""
+
+
 def main():
     built = []
-    built.append(page("index.html", "Sapphire Stayss | Resort in Yelagiri Hills with Breakfast",
-                      "A quiet garden resort in Mangalam, Yelagiri. Air-conditioned rooms and a private villa from ₹2,350 a night, complimentary breakfast, campfire on request.",
-                      home, "home", jsonld=hotel_jsonld()))
-    built.append(page("about.html", "About Us | Sapphire Stayss, Yelagiri",
-                      "Sapphire Stayss is a small, quiet stay at the foot of Swamymalai in Mangalam, Yelagiri, looked after personally.",
-                      about_page, "about", image="home/evening-exterior"))
-    built.append(page("rooms.html", "Rooms & Prices | Sapphire Stayss, Yelagiri",
-                      "Six room types at Sapphire Stayss, Yelagiri, from ₹2,350 to ₹5,050 a night with breakfast. Family rooms, a private villa and mountain-view doubles.",
-                      rooms_page, "rooms", image=ROOMS[0]["photos"][0][0]))
+    rooms_title = f"{sum(r['units'] for r in ROOMS)} rooms"
+    built.append(page("index.html", "Sapphire Stayss | Garden Resort in Yelagiri Hills with Breakfast",
+                      f"Sapphire Stayss is a quiet garden resort with {rooms_title} in Mangalam, Yelagiri, Tamil Nadu. Air-conditioned rooms and a private villa from ₹2,350 a night, complimentary breakfast, free Wi-Fi and parking.",
+                      home, "home"))
+    built.append(page("about.html", "About Sapphire Stayss | Small Resort in Yelagiri",
+                      "About Sapphire Stayss, a small, quiet resort at the foot of Swamymalai in Mangalam, Yelagiri, looked after personally by its hosts.",
+                      about_page, "about", crumbs=[("About", "about.html")], image="home/evening-exterior"))
+    built.append(page("rooms.html", "Rooms & Prices in Yelagiri | Sapphire Stayss",
+                      "Compare the six room types at Sapphire Stayss, Yelagiri: beds, guests, size, views and prices from ₹2,350 to ₹5,050 a night with breakfast.",
+                      rooms_page, "rooms", jsonld=[room_jsonld(r) for r in ROOMS], crumbs=[("Rooms", "rooms.html")],
+                      image=ROOMS[0]["photos"][0][0]))
     for r in ROOMS:
-        built.append(page(f"rooms/{r['slug']}.html", f"{r['name']} | Sapphire Stayss, Yelagiri",
-                          f"{r['name']} at Sapphire Stayss, Yelagiri: {r['beds']}, sleeps {sleeps(r)}. {rupees(r['price'])} a night with breakfast.",
-                          room_page(r), "rooms", image=r["photos"][0][0], lightbox=True,
-                          jsonld={"@context": "https://schema.org", "@type": "HotelRoom", "name": r["name"],
-                                  "description": r["summary"], "bed": r["beds"],
-                                  "occupancy": {"@type": "QuantitativeValue", "maxValue": r["adults"]},
-                                  "containedInPlace": {"@type": "Hotel", "name": B["name"], "url": B["site_url"] + "/"}}))
-    built.append(page("gallery.html", "Photo Gallery | Sapphire Stayss, Yelagiri",
-                      "Photos of the garden, rooms, villa, dining room and evenings at Sapphire Stayss in Yelagiri.",
-                      gallery_page, "gallery", lightbox=True, image="home/evening-exterior"))
-    built.append(page("explore.html", "Things to Do in Yelagiri Near Sapphire Stayss",
-                      "Things to do near Sapphire Stayss, Yelagiri: the Swamymalai trek 500 m away, Punganoor Lake, the Nature Park fountain show, bird parks, adventure parks, temples and viewpoints, with best times and directions.",
-                      explore_page, "explore"))
-    built.append(page("policies.html", "Policies & FAQ | Sapphire Stayss, Yelagiri",
-                      "Check-in and check-out at 12 noon, 50% advance, free cancellation up to 3 days before arrival, breakfast included.",
-                      policies_page, "policies"))
-    built.append(page("contact.html", "Contact | Sapphire Stayss, Yelagiri",
-                      f"Call or WhatsApp Sapphire Stayss on {B['phone_whatsapp']}. Mangalam, Yelagiri, Tamil Nadu 635853.",
-                      contact_page, "contact"))
-    built.append(page("terms.html", "Terms & Conditions | Sapphire Stayss", "Booking terms for Sapphire Stayss, Yelagiri.",
-                      legal("Terms &amp; conditions", "Legal", terms_body)))
-    built.append(page("privacy.html", "Privacy Policy | Sapphire Stayss", "How Sapphire Stayss collects and uses your personal information.",
-                      legal("Privacy policy", "Legal", privacy_body)))
-    built.append(page("refund-policy.html", "Cancellation & Refund Policy | Sapphire Stayss",
-                      "Free cancellation up to 3 days before check-in at Sapphire Stayss. How refunds work.",
-                      legal("Cancellation &amp; refund policy", "Legal", refund_body)))
-    page("404.html", "Page not found | Sapphire Stayss", "This page could not be found.", not_found)
+        built.append(page(f"rooms/{r['slug']}.html", f"{r['name']} in Yelagiri | Sapphire Stayss",
+                          f"{r['name']} at Sapphire Stayss, Yelagiri: {r['beds']}, sleeps {sleeps(r)}, {r['size_m2']} m². {rupees(r['price'])} a night with breakfast.",
+                          room_page(r), "rooms", image=r["photos"][0][0], lightbox=True, jsonld=[room_jsonld(r)],
+                          crumbs=[("Rooms", "rooms.html"), (r["name"], f"rooms/{r['slug']}.html")]))
+    built.append(page("gallery.html", "Photo Gallery | Sapphire Stayss Resort, Yelagiri",
+                      "Photos of the garden, rooms, villa, dining room and evenings at Sapphire Stayss resort in Mangalam, Yelagiri.",
+                      gallery_page, "gallery", lightbox=True, crumbs=[("Gallery", "gallery.html")], image="home/evening-exterior"))
+    built.append(page("explore.html", "Things to Do in Yelagiri | Sapphire Stayss",
+                      "Things to do in Yelagiri, with distances from Sapphire Stayss: the Swamymalai trek 500 m away, Punganoor Lake, the Nature Park fountain show, Fundera bird park, adventure parks, temples and viewpoints.",
+                      explore_page, "explore", jsonld=explore_jsonld(), crumbs=[("Things to do in Yelagiri", "explore.html")]))
+    built.append(page("faq.html", "Policies & FAQ | Sapphire Stayss, Yelagiri",
+                      "Sapphire Stayss, Yelagiri FAQ: 12 noon check-in and check-out, breakfast included, distance from Bangalore and Chennai, nearest station, parking, Wi-Fi, children and cancellation.",
+                      faq_page, "faq", jsonld=faq_jsonld(), crumbs=[("Policies & FAQ", "faq.html")]))
+    for city, name in [("bangalore", "Bangalore"), ("chennai", "Chennai")]:
+        t = TRAVEL[city]
+        built.append(page(f"yelagiri-from-{city}.html", f"How to Reach Yelagiri from {name} by Road | Sapphire Stayss",
+                          f"Driving from {name} to Yelagiri: {t['km']}, {t['time']}. Route, stops, the {TRAVEL['ghat']['hairpins']}-bend ghat road from Ponneri and the nearest railway station.",
+                          route_page(city), "", crumbs=[(f"How to reach Yelagiri from {name}", f"yelagiri-from-{city}.html")]))
+    built.append(page("contact.html", "Contact & Directions | Sapphire Stayss, Yelagiri",
+                      f"Call or WhatsApp Sapphire Stayss on {B['phone_whatsapp']} or {B['phone_other']}. Address, map and directions: Mangalam, Yelagiri, Tamil Nadu 635853.",
+                      contact_page, "contact", crumbs=[("Contact", "contact.html")]))
+    built.append(page("terms.html", "Terms & Conditions | Sapphire Stayss, Yelagiri", "Booking terms for Sapphire Stayss resort in Yelagiri, Tamil Nadu.",
+                      legal("Terms &amp; conditions", "Legal", terms_body), crumbs=[("Terms", "terms.html")]))
+    built.append(page("privacy.html", "Privacy Policy | Sapphire Stayss, Yelagiri", "How Sapphire Stayss, Yelagiri collects and uses your personal information.",
+                      legal("Privacy policy", "Legal", privacy_body), crumbs=[("Privacy", "privacy.html")]))
+    built.append(page("refund-policy.html", "Cancellation & Refund Policy | Sapphire Stayss, Yelagiri",
+                      "Free cancellation up to 3 days before check-in at Sapphire Stayss, Yelagiri. How refunds work.",
+                      legal("Cancellation &amp; refund policy", "Legal", refund_body), crumbs=[("Cancellation & refunds", "refund-policy.html")]))
+    page("404.html", "Page not found | Sapphire Stayss, Yelagiri", "This page could not be found.", not_found)
+    # Old address: .htaccess redirects it on GoDaddy; this copy covers the preview host. Not in the sitemap.
+    page("policies.html", "Policies & FAQ has moved | Sapphire Stayss", "This page is now at faq.html.", moved_page("faq.html"),
+         head_extra=f'\n<meta http-equiv="refresh" content="0; url=faq.html">\n<meta name="robots" content="noindex">')
+    with open(os.path.join(OUT, "policies.html"), encoding="utf-8") as f:  # point the canonical at the new page
+        moved = f.read().replace(f'<link rel="canonical" href="{url("policies.html")}">', f'<link rel="canonical" href="{url("faq.html")}">')
+    with open(os.path.join(OUT, "policies.html"), "w", encoding="utf-8") as f:
+        f.write(moved)
 
     urls = "\n".join(
-        f"  <url><loc>{B['site_url']}/{'' if u == 'index.html' else u}</loc><lastmod>{TODAY}</lastmod></url>" for u in built
+        f"  <url><loc>{url(u)}</loc><lastmod>{TODAY}</lastmod></url>" for u in built
     )
     with open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8") as f:
         f.write(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}\n</urlset>\n')
     with open(os.path.join(OUT, "robots.txt"), "w", encoding="utf-8") as f:
-        f.write(f"User-agent: *\nAllow: /\n\nSitemap: {B['site_url']}/sitemap.xml\n")
-    print(f"Built {len(built) + 1} pages into public/")
+        f.write(robots_txt())
+    with open(os.path.join(OUT, "llms.txt"), "w", encoding="utf-8") as f:
+        f.write(llms_txt())
+    print(f"Built {len(built) + 2} pages, sitemap.xml, robots.txt and llms.txt into public/")
+
+    # List every TODO still showing, so nothing goes live unnoticed.
+    import re
+    left = {}
+    for u in built:
+        with open(os.path.join(OUT, u), encoding="utf-8") as f:
+            for t in re.findall(r'<mark class="todo">TODO: (.*?)</mark>', f.read()):
+                pages = left.setdefault(html.unescape(t), [])
+                if u not in pages:
+                    pages.append(u)
+    # Facts that only go into the schema and llms.txt, so they don't show on a page
+    if not (B["geo"]["latitude"] and B["geo"]["longitude"]):
+        left["latitude and longitude of the resort gate (geo) for the Hotel schema"] = ["content/site.json"]
+    if not B["google_business_url"]:
+        left["your Google Business Profile link (google_business_url) for the schema's sameAs"] = ["content/site.json"]
+    if not B["same_as"]:
+        left["your Booking.com, Agoda, MakeMyTrip and Tripadvisor listing links (same_as) for the schema's sameAs"] = ["content/site.json"]
+    if left:
+        print(f"\n{len(left)} TODO(s) still on the site (fill them in content/site.json, then rebuild):")
+        for t, pages in left.items():
+            print(f"  - {t}  [{', '.join(pages[:3])}{' …' if len(pages) > 3 else ''}]")
 
 
 if __name__ == "__main__":

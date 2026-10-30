@@ -15,6 +15,15 @@
     "instagram": "https://www.instagram.com/sapphirestayss__yelagiri/",
     "instagram_handle": "@sapphirestayss__yelagiri",
     "maps_url": "https://maps.app.goo.gl/gnNPDMo8Wk9LJBo39",
+    "_todo_note": "Empty values below are facts still to fill in. While empty, the pages show a yellow TODO mark and the fact is left out of the schema and llms.txt. build.py lists every TODO left.",
+    "geo": {
+      "latitude": "",
+      "longitude": ""
+    },
+    "maps_embed_url": "",
+    "google_business_url": "",
+    "google_review_url": "",
+    "same_as": [],
     "site_url": "https://sapphirestayss.in",
     "check_in": "12 noon",
     "check_out": "12 noon",
@@ -23,7 +32,15 @@
     "extra_mattress": "₹200",
     "breakfast_time": "8:30 to 10 AM",
     "child_age": "under 6",
-    "year": 2026
+    "pool": "",
+    "pets": "",
+    "station_pickup": "",
+    "year": 2026,
+    "about": {
+      "run_by": "",
+      "since": "",
+      "story": ""
+    }
   },
   "booking": {
     "_note": "Paste the channel manager's booking page link here when it is ready. While it is empty, every Book button opens WhatsApp instead.",
@@ -334,27 +351,37 @@
     {
       "quote": "10/10 for the hospitality. Feels like home for friends and family.",
       "name": "Vasy",
-      "source": "Google"
+      "source": "Google",
+      "city": "",
+      "month": ""
     },
     {
       "quote": "We booked a two-bedroom villa which was very comfortable and well-maintained. The bathrooms were spotless clean.",
       "name": "Gunaseelan",
-      "source": "Google"
+      "source": "Google",
+      "city": "",
+      "month": ""
     },
     {
       "quote": "Courteous staff. We had ordered dinner, birthday cake and camp fire through them. Enjoyed the stay.",
       "name": "Palaniappan",
-      "source": "Google"
+      "source": "Google",
+      "city": "",
+      "month": ""
     },
     {
       "quote": "Value for money place. Nice villas. Great breakfast. Peaceful area to stay.",
       "name": "Charles Daniel",
-      "source": "Tripadvisor"
+      "source": "Tripadvisor",
+      "city": "",
+      "month": ""
     },
     {
       "quote": "The room and restroom are very neat and clean. The garden area was so relaxing.",
       "name": "Siva Kumar",
-      "source": "Google"
+      "source": "Google",
+      "city": "",
+      "month": ""
     }
   ],
   "gallery": [
@@ -841,5 +868,46 @@
         "must": false
       }
     ]
+  },
+  "travel": {
+    "_note": "Facts for the FAQ and the two 'How to reach' pages. Figures are to Yelagiri town from published travel guides and vary between sources, so the pages say 'about'. verified=false shows a TODO asking you to check them against your own Google Maps route to the resort and then set verified to true.",
+    "verified": false,
+    "bangalore": {
+      "km": "about 160 km",
+      "time": "3½ to 4 hours",
+      "route": [
+        "Bengaluru",
+        "Hosur",
+        "Krishnagiri",
+        "Vaniyambadi",
+        "Ponneri",
+        "Yelagiri ghat road",
+        "Mangalam"
+      ]
+    },
+    "chennai": {
+      "km": "about 230 to 250 km",
+      "time": "4½ to 5½ hours",
+      "route": [
+        "Chennai",
+        "Poonamallee",
+        "Sriperumbudur",
+        "Walajapet",
+        "Vellore",
+        "Ambur",
+        "Vaniyambadi",
+        "Ponneri",
+        "Yelagiri ghat road",
+        "Mangalam"
+      ]
+    },
+    "ghat": {
+      "hairpins": 14,
+      "starts": "Ponneri, at the foot of the hills"
+    },
+    "station": {
+      "name": "Jolarpettai Junction",
+      "km": "about 20 km"
+    }
   }
 }
