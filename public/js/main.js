@@ -100,7 +100,7 @@
       var it = items[index];
       img.src = it.getAttribute('data-full');
       img.alt = it.querySelector('img').alt;
-      caption.textContent = it.querySelector('img').alt + '  ·  ' + (index + 1) + ' / ' + items.length;
+      caption.textContent = (it.getAttribute('data-caption') || img.alt) + '  ·  ' + (index + 1) + ' / ' + items.length;
     };
     var close = function () {
       box.hidden = true;

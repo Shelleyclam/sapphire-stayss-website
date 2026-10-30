@@ -15,6 +15,19 @@
     "instagram": "https://www.instagram.com/sapphirestayss__yelagiri/",
     "instagram_handle": "@sapphirestayss__yelagiri",
     "maps_url": "https://maps.app.goo.gl/gnNPDMo8Wk9LJBo39",
+    "_todo_note": "Empty values below are facts still to fill in. While empty, the pages show a yellow TODO mark and the fact is left out of the schema and llms.txt. build.py lists every TODO left.",
+    "geo": {
+      "latitude": "12.5873752",
+      "longitude": "78.657004"
+    },
+    "maps_embed_url": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3893.922258679139!2d78.65442907547407!3d12.587375187693821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bad010025796df3%3A0xdfdc81c1bd5afc79!2sSapphire%20Stayss!5e0!3m2!1sen!2sin!4v1793358820821!5m2!1sen!2sin",
+    "google_business_url": "https://maps.google.com/?cid=16130910634439801977",
+    "google_review_url": "https://www.google.com/search?q=Sapphire+Stayss#lrd=0x3bad010025796df3:0xdfdc81c1bd5afc79,3,,,,",
+    "same_as": [
+      "https://www.booking.com/hotel/in/sapphire-stayss.html",
+      "https://www.agoda.com/sapphire-stayss/hotel/all/yelagiri-in.html",
+      "https://www.tripadvisor.in/Hotel_Review-g27500536-d27987381-Reviews-Sapphire_Stayss-Mangalam_R_F_Yelagiri_Vellore_District_Tamil_Nadu.html"
+    ],
     "site_url": "https://sapphirestayss.in",
     "check_in": "12 noon",
     "check_out": "12 noon",
@@ -23,7 +36,19 @@
     "extra_mattress": "₹200",
     "breakfast_time": "8:30 to 10 AM",
     "child_age": "under 6",
-    "year": 2026
+    "pool": "no",
+    "pets": "no",
+    "station_pickup": "no",
+    "prices_include_gst": true,
+    "rate_note": "The same rates apply every day of the week, including weekends and holidays.",
+    "landmark": "In Mangalam, just before Mangalam Government School, turn left at the Sapphire Stayss name board.",
+    "year": 2026,
+    "about": {
+      "run_by": "",
+      "since": "",
+      "story": ""
+    },
+    "booking_com_url": "https://www.booking.com/hotel/in/sapphire-stayss.html"
   },
   "booking": {
     "_note": "Paste the channel manager's booking page link here when it is ready. While it is empty, every Book button opens WhatsApp instead.",
@@ -332,28 +357,83 @@
   ],
   "reviews": [
     {
+      "quote": "Everything was perfect. Very clean, beautiful view from the room, very big and very comfortable bed, great breakfast and super kind owner and staff. I can not recommend it more. Thank you!",
+      "name": "Lisa",
+      "city": "",
+      "country": "Spain",
+      "month": "February 2026",
+      "source": "Booking.com"
+    },
+    {
+      "quote": "The landscape Architectural lights & the property maintenance were giving premium experience in the entire environment. It is value for money. Breakfast awesome … For a family stay for 2-4days really worth.",
+      "name": "Karthik",
+      "city": "",
+      "country": "India",
+      "month": "September 2026",
+      "source": "Booking.com"
+    },
+    {
+      "quote": "I loved everything about the stay. It's very clean and quiet. The campus is incredibly beautiful. Best place to stay with family.",
+      "name": "Mayuri",
+      "city": "",
+      "country": "India",
+      "month": "July 2026",
+      "source": "Booking.com"
+    },
+    {
+      "quote": "The management team were a family, took care of our tiny wishes also. … Superb for both family n individual groups.",
+      "name": "Prabu",
+      "city": "",
+      "country": "India",
+      "month": "July 2025",
+      "source": "Booking.com"
+    },
+    {
+      "quote": "The property owners were friendly and the breakfast is must try with lot of options, good taste. … I would recommend this accommodation which is a bargain at the prices given its services and good breakfast.",
+      "name": "Krishnakumar",
+      "city": "",
+      "country": "India",
+      "month": "July 2025",
+      "source": "Booking.com"
+    },
+    {
       "quote": "10/10 for the hospitality. Feels like home for friends and family.",
       "name": "Vasy",
+      "city": "",
+      "country": "",
+      "month": "",
       "source": "Google"
     },
     {
       "quote": "We booked a two-bedroom villa which was very comfortable and well-maintained. The bathrooms were spotless clean.",
       "name": "Gunaseelan",
+      "city": "",
+      "country": "",
+      "month": "",
       "source": "Google"
     },
     {
       "quote": "Courteous staff. We had ordered dinner, birthday cake and camp fire through them. Enjoyed the stay.",
       "name": "Palaniappan",
+      "city": "",
+      "country": "",
+      "month": "",
       "source": "Google"
     },
     {
       "quote": "Value for money place. Nice villas. Great breakfast. Peaceful area to stay.",
       "name": "Charles Daniel",
+      "city": "",
+      "country": "",
+      "month": "",
       "source": "Tripadvisor"
     },
     {
       "quote": "The room and restroom are very neat and clean. The garden area was so relaxing.",
       "name": "Siva Kumar",
+      "city": "",
+      "country": "",
+      "month": "",
       "source": "Google"
     }
   ],
@@ -576,7 +656,7 @@
     "list": [
       {
         "name": "Swamymalai trek",
-        "km": 0.5,
+        "km": 0.1,
         "cat": "nature",
         "times": [
           "morning"
@@ -841,5 +921,46 @@
         "must": false
       }
     ]
+  },
+  "travel": {
+    "_note": "Facts for the FAQ and the two 'How to reach' pages. km is by road from the city to the resort gate (confirmed by the owner). Drive times are typical figures from travel guides.",
+    "verified": true,
+    "bangalore": {
+      "km": "167 km",
+      "time": "3½ to 4 hours",
+      "route": [
+        "Bengaluru",
+        "Hosur",
+        "Krishnagiri",
+        "Vaniyambadi",
+        "Ponneri",
+        "Yelagiri ghat road",
+        "Mangalam"
+      ]
+    },
+    "chennai": {
+      "km": "255 km",
+      "time": "4½ to 5½ hours",
+      "route": [
+        "Chennai",
+        "Poonamallee",
+        "Sriperumbudur",
+        "Walajapet",
+        "Vellore",
+        "Ambur",
+        "Vaniyambadi",
+        "Ponneri",
+        "Yelagiri ghat road",
+        "Mangalam"
+      ]
+    },
+    "ghat": {
+      "hairpins": 14,
+      "starts": "Ponneri, at the foot of the hills"
+    },
+    "station": {
+      "name": "Jolarpettai Junction",
+      "km": "about 20 km"
+    }
   }
 }

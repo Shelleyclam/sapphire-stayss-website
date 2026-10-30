@@ -16,8 +16,22 @@ The website for Sapphire Stayss, Yelagiri: https://sapphirestayss.in
 
 ## Pages
 
-Home, Rooms, one page per room (6), Gallery, Explore Yelagiri, Policies & FAQ, Contact,
-Terms, Privacy, Cancellation & Refund Policy, and a "page not found" page.
+Home, About, Rooms, one page per room (6), Gallery, Things to do in Yelagiri, Policies & FAQ (`faq.html`),
+How to reach Yelagiri from Bangalore, How to reach Yelagiri from Chennai, Contact, Terms, Privacy,
+Cancellation & Refund Policy, and a "page not found" page. `policies.html` is the old FAQ address and
+forwards to `faq.html`.
+
+The build also writes `sitemap.xml`, `robots.txt` (welcomes Google, Bing and the AI search crawlers)
+and `llms.txt` (a plain-text summary of the resort for AI assistants). Every page carries schema.org
+data: `Hotel` on every page, `HotelRoom` with prices on the room pages, `FAQPage`, `BreadcrumbList`
+and a list of attractions on the Explore page.
+
+## Facts still to fill in (TODOs)
+
+Where a fact is missing, the page shows a yellow **TODO** mark and the fact is left out of the
+schema and `llms.txt`. Fill the empty fields in `content/site.json` (`business`, `business.about`,
+`reviews`, `travel`), run `python3 build.py`, and it prints every TODO that is left.
+Don't go live until that list is empty.
 
 ## Viewing the site on your computer
 

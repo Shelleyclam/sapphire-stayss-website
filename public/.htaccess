@@ -22,6 +22,7 @@ Redirect 301 "/html pages/room3.html" /rooms/deluxe-family-suite.html
 Redirect 301 "/html pages/room4.html" /rooms/double-room-mountain-view.html
 Redirect 301 "/html pages/room5.html" /rooms/double-or-twin-room.html
 Redirect 301 "/html pages/room6.html" /rooms/king-room-mountain-view.html
+Redirect 301 /policies.html /faq.html
 
 <IfModule mod_expires.c>
   ExpiresActive On
