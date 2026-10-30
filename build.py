@@ -385,8 +385,8 @@ def room_jsonld(room):
 # ---------------------------------------------------------------- Home
 
 def review_by(r):
-    """'Vasy · Chennai · March 2026 · Google', skipping whatever we don't have."""
-    return " · ".join(e(x) for x in [r["name"], r.get("city"), r.get("month"), r["source"]] if x)
+    """'Lisa · Spain · February 2026 · Booking.com', skipping whatever we don't have."""
+    return " · ".join(e(x) for x in [r["name"], r.get("city"), r.get("country"), r.get("month"), r["source"]] if x)
 
 
 def home(p):
@@ -394,7 +394,7 @@ def home(p):
     rv = DATA["reviews"]
     more = "\n      ".join(
         f'<figure><blockquote>“{e(r["quote"])}”</blockquote><figcaption>{review_by(r)}</figcaption></figure>'
-        for r in rv[1:]
+        for r in rv[1:4]
     )
     review_us = (f'<a class="link" href="{e(B["google_review_url"])}" target="_blank" rel="noopener">Review us on Google</a>'
                  if B["google_review_url"] else todo("add your Google review link (google_review_url) for a “Review us on Google” button"))
@@ -523,14 +523,13 @@ def home(p):
 </section>
 
 <section class="wrap section tight-top reviews" id="reviews" aria-label="Guest reviews">
-  <span class="label">Guests on Google &amp; Tripadvisor</span>
+  <span class="label">Guest reviews</span>
   <p class="quote">“{e(rv[0]['quote'])}”</p>
   <p class="quote-by">{review_by(rv[0])}</p>
   <div class="more-quotes">
       {more}
   </div>
-  <p class="small-print">{todo("paste more real guest reviews into content/site.json → reviews, with first name, city and month of stay (quote, name, city, month, source). Only real reviews, copied word for word.")}</p>
-  <div class="btn-row" style="justify-content:center"><a class="link" href="{e(B['maps_url'])}" target="_blank" rel="noopener">All reviews on Google</a>{review_us}</div>
+  <div class="btn-row" style="justify-content:center"><a class="link" href="{e(B['booking_com_url'])}" target="_blank" rel="noopener">Reviews on Booking.com</a><a class="link" href="{e(B['maps_url'])}" target="_blank" rel="noopener">Reviews on Google</a>{review_us}</div>
 </section>
 
 <section class="wrap section tight-top where" id="where" aria-labelledby="where-title">
@@ -792,7 +791,7 @@ ABOUT_SHORT = ("Sapphire Stayss is a small, quiet stay at the foot of Swamymalai
 
 
 def about_page(p):
-    rv = DATA["reviews"][0]
+    rv = DATA["reviews"][min(4, len(DATA["reviews"]) - 1)]  # home shows reviews 0-3
     A = B["about"]
     run_by = e(A["run_by"]) if A["run_by"] else todo("who runs Sapphire Stayss (the hosts' names)")
     since = e(A["since"]) if A["since"] else todo("the year you started hosting guests")
