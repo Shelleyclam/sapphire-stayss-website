@@ -25,7 +25,8 @@
     "google_review_url": "https://www.google.com/search?q=Sapphire+Stayss#lrd=0x3bad010025796df3:0xdfdc81c1bd5afc79,3,,,,",
     "same_as": [
       "https://www.booking.com/hotel/in/sapphire-stayss.html",
-      "https://www.agoda.com/sapphire-stayss/hotel/all/yelagiri-in.html"
+      "https://www.agoda.com/sapphire-stayss/hotel/all/yelagiri-in.html",
+      "https://www.tripadvisor.in/Hotel_Review-g27500536-d27987381-Reviews-Sapphire_Stayss-Mangalam_R_F_Yelagiri_Vellore_District_Tamil_Nadu.html"
     ],
     "site_url": "https://sapphirestayss.in",
     "check_in": "12 noon",
@@ -655,7 +656,7 @@
     "list": [
       {
         "name": "Swamymalai trek",
-        "km": 0.5,
+        "km": 0.1,
         "cat": "nature",
         "times": [
           "morning"

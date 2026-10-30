@@ -398,7 +398,7 @@ def home(p):
     )
     review_us = (f'<a class="link" href="{e(B["google_review_url"])}" target="_blank" rel="noopener">Review us on Google</a>'
                  if B["google_review_url"] else todo("add your Google review link (google_review_url) for a “Review us on Google” button"))
-    stops = [(0, "Sapphire Stayss", True), (0.5, "Swamymalai trek starts, right behind us", False),
+    stops = [(0, "Sapphire Stayss; the Swamymalai trek starts 100 m away", True),
              (1, "Selfie Panda &amp; Chocolate Factory", False), (1.5, "Murugan (Velavan) Temple", False),
              (2, "Fundera Park", False), (2.5, "Nilavoor View Point", False),
              (3.5, "Boat House &amp; Nature Park", False), (4, "Mountain View Adventure Park", False)]
@@ -418,7 +418,7 @@ def home(p):
         <source media="(max-width: 1100px)" srcset="{p}img/home/hero-swamymalai-sm.webp 1000w, {p}img/home/hero-swamymalai.webp 1600w" sizes="100vw">
         <img src="{p}img/home/hero-swamymalai.webp" alt="Forested hills and the plains below, seen from the top of Swamymalai" width="1600" height="685" fetchpriority="high">
       </picture>
-      <figcaption>The view from Swamymalai, 500 m from our gate</figcaption>
+      <figcaption>The view from Swamymalai, whose trek starts 100 m from our gate</figcaption>
     </figure>
   </section>
   {availability_form(p)}
@@ -427,7 +427,7 @@ def home(p):
 <section class="wrap section intro" aria-label="About">
   <p class="intro-lead">Fourteen hairpin bends up from the plains, the air cools and the traffic fades. Evenings here end by the campfire.</p>
   <dl class="facts">
-    <div><dt>Foothills</dt><dd>At the foot of Swamymalai, with the trek starting 500 m away</dd></div>
+    <div><dt>Foothills</dt><dd>At the foot of Swamymalai, with the trek starting 100 m away</dd></div>
     <div><dt>Breakfast</dt><dd>Complimentary South Indian breakfast for every guest</dd></div>
     <div><dt>AC</dt><dd>In every room, with TV, Wi-Fi, kettle and hot water</dd></div>
     <div><dt>12 noon</dt><dd>Check-in and check-out, so you get a full day</dd></div>
@@ -492,7 +492,7 @@ def home(p):
   </div>
   <div class="moment">
     <time>06:30<small>Early morning</small></time>
-    <div><h3>Climb Swamymalai</h3><p>The trek to Swamymalai, the highest point in Yelagiri, starts just 500 m behind the resort. Set off early for cool air and clear views, and be back in time for breakfast.</p><span class="tag">Starts behind the resort</span></div>
+    <div><h3>Climb Swamymalai</h3><p>The trek to Swamymalai, the highest point in Yelagiri, starts just 100 m from the resort. Set off early for cool air and clear views, and be back in time for breakfast.</p><span class="tag">Starts behind the resort</span></div>
     {img(p, "home/swamymalai-view", "View over forested hills and the plains from the top of Swamymalai", "(max-width: 920px) 100vw, 45vw")}
   </div>
   <div class="moment morning">
@@ -1267,7 +1267,7 @@ def main():
                       "Photos of the garden, rooms, villa, dining room and evenings at Sapphire Stayss resort in Mangalam, Yelagiri.",
                       gallery_page, "gallery", lightbox=True, crumbs=[("Gallery", "gallery.html")], image="home/evening-exterior"))
     built.append(page("explore.html", "Things to Do in Yelagiri | Sapphire Stayss",
-                      "Things to do in Yelagiri, with distances from Sapphire Stayss: the Swamymalai trek 500 m away, Punganoor Lake, the Nature Park fountain show, Fundera bird park, adventure parks, temples and viewpoints.",
+                      "Things to do in Yelagiri, with distances from Sapphire Stayss: the Swamymalai trek 100 m away, Punganoor Lake, the Nature Park fountain show, Fundera bird park, adventure parks, temples and viewpoints.",
                       explore_page, "explore", jsonld=explore_jsonld(), crumbs=[("Things to do in Yelagiri", "explore.html")]))
     built.append(page("faq.html", "Policies & FAQ | Sapphire Stayss, Yelagiri",
                       "Sapphire Stayss, Yelagiri FAQ: 12 noon check-in and check-out, breakfast included, distance from Bangalore and Chennai, nearest station, parking, Wi-Fi, children and cancellation.",
