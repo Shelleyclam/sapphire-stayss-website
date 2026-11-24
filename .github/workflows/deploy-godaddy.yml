@@ -1,0 +1,45 @@
+# Uploads public/ to the GoDaddy cPanel hosting (sapphirestayss.in) on every push.
+# Needs three repository secrets, added in GitHub: Settings > Secrets and variables > Actions:
+#   FTP_SERVER    e.g. ftp.sapphirestayss.in (shown in cPanel > FTP Accounts > Configure FTP Client)
+#   FTP_USERNAME  the FTP account's full login, e.g. deploy@sapphirestayss.in
+#   FTP_PASSWORD  that account's password
+# Create the FTP account with its directory set to public_html, so uploads land in the site root.
+# Until the secrets exist, the job skips the upload and says so.
+name: Deploy to GoDaddy
+
+on:
+  push:
+    branches: [new-website]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-godaddy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check FTP settings
+        id: check
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+        run: |
+          if [ -z "$FTP_SERVER" ]; then
+            echo "FTP secrets are not set yet, so nothing was uploaded." >> "$GITHUB_STEP_SUMMARY"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.check.outputs.ready == 'true'
+      - name: Upload public/ to cPanel
+        if: steps.check.outputs.ready == 'true'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+          local-dir: ./public/
+          server-dir: ${{ vars.FTP_SERVER_DIR || './' }}

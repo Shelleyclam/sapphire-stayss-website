@@ -5,8 +5,10 @@ Options -Indexes
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  # Always use https and the bare domain
-  RewriteCond %{HTTPS} off [OR]
+  # Always use https and the bare domain.
+  # The site sits behind Cloudflare, which talks to this server and passes the visitor's
+  # protocol in X-Forwarded-Proto. Checking %{HTTPS} here would cause a redirect loop.
+  RewriteCond %{HTTP:X-Forwarded-Proto} =http [OR]
   RewriteCond %{HTTP_HOST} ^www\. [NC]
   RewriteRule ^ https://sapphirestayss.in%{REQUEST_URI} [L,R=301]
 </IfModule>
