@@ -452,13 +452,13 @@
     ],
     [
       "property",
-      "property/garden-swing",
-      "Garden path and children's swing"
+      "property/path-rain",
+      "Garden path on a misty, rainy day"
     ],
     [
       "property",
-      "property/garden-path",
-      "Stone path through the garden"
+      "property/entrance-plants",
+      "Potted plants by the entrance"
     ],
     [
       "property",
@@ -584,6 +584,16 @@
       "evenings",
       "home/campfire",
       "Campfire in the garden"
+    ],
+    [
+      "evenings",
+      "property/path-night",
+      "Garden path lit up at night"
+    ],
+    [
+      "evenings",
+      "property/swing-night",
+      "Children's swing under the pergola at night"
     ],
     [
       "evenings",

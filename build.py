@@ -459,7 +459,7 @@ def home(p):
   </div>
   <div class="trio">
     <figure>{img(p, "home/evening-exterior", "Sapphire Stayss lit up in the evening", "(max-width: 560px) 100vw, 40vw")}<figcaption>Evenings at Sapphire Stayss</figcaption></figure>
-    <figure>{img(p, "property/garden-swing", "Garden path with a children's swing", "(max-width: 560px) 50vw, 30vw")}<figcaption>Swings for the children</figcaption></figure>
+    <figure>{img(p, "property/swing-night", "Children's swing under the pergola, lit up at night", "(max-width: 560px) 50vw, 30vw")}<figcaption>Swings for the children</figcaption></figure>
     <figure>{img(p, "property/garden-pergola", "Pergola covered in green creepers", "(max-width: 560px) 50vw, 30vw")}<figcaption>Shade under the pergola</figcaption></figure>
   </div>
 </section>
