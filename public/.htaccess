@@ -14,17 +14,17 @@ Options -Indexes
 </IfModule>
 
 # Old website addresses, sent to their new pages (keeps Google links working)
-Redirect 301 "/html pages/stayss.html" /rooms.html
-Redirect 301 "/html pages/gallery.html" /gallery.html
-Redirect 301 "/html pages/see and do.html" /explore.html
-Redirect 301 "/html pages/Contact.html" /contact.html
-Redirect 301 "/html pages/room-1.html" /rooms/deluxe-villa.html
-Redirect 301 "/html pages/room2.html" /rooms/family-room-garden-view.html
-Redirect 301 "/html pages/room3.html" /rooms/deluxe-family-suite.html
-Redirect 301 "/html pages/room4.html" /rooms/double-room-mountain-view.html
-Redirect 301 "/html pages/room5.html" /rooms/double-or-twin-room.html
-Redirect 301 "/html pages/room6.html" /rooms/king-room-mountain-view.html
-Redirect 301 /policies.html /faq.html
+Redirect 301 "/html pages/stayss.html" https://sapphirestayss.in/rooms.html
+Redirect 301 "/html pages/gallery.html" https://sapphirestayss.in/gallery.html
+Redirect 301 "/html pages/see and do.html" https://sapphirestayss.in/explore.html
+Redirect 301 "/html pages/Contact.html" https://sapphirestayss.in/contact.html
+Redirect 301 "/html pages/room-1.html" https://sapphirestayss.in/rooms/deluxe-villa.html
+Redirect 301 "/html pages/room2.html" https://sapphirestayss.in/rooms/family-room-garden-view.html
+Redirect 301 "/html pages/room3.html" https://sapphirestayss.in/rooms/deluxe-family-suite.html
+Redirect 301 "/html pages/room4.html" https://sapphirestayss.in/rooms/double-room-mountain-view.html
+Redirect 301 "/html pages/room5.html" https://sapphirestayss.in/rooms/double-or-twin-room.html
+Redirect 301 "/html pages/room6.html" https://sapphirestayss.in/rooms/king-room-mountain-view.html
+Redirect 301 /policies.html https://sapphirestayss.in/faq.html
 
 <IfModule mod_expires.c>
   ExpiresActive On
