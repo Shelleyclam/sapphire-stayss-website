@@ -80,7 +80,7 @@
     btn.addEventListener('click', function () {
       var cat = btn.getAttribute('data-filter');
       filters.forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
-      document.querySelectorAll('.masonry figure').forEach(function (fig) {
+      document.querySelectorAll('.bento figure').forEach(function (fig) {
         fig.hidden = cat !== 'all' && fig.getAttribute('data-cat') !== cat;
       });
     });

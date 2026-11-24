@@ -186,11 +186,6 @@ a { color: inherit; }
 .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
 .filters button { font: 400 12px/1 var(--font-body); letter-spacing: .18em; text-transform: uppercase; padding: 11px 16px; border: 1px solid var(--rule); background: transparent; color: var(--ink-soft); cursor: pointer; }
 .filters button[aria-pressed="true"] { border-color: var(--ink); color: var(--ink); }
-.masonry { columns: 3 280px; column-gap: 14px; }
-.masonry figure { margin: 0 0 14px; break-inside: avoid; }
-.masonry button { padding: 0; border: 0; background: var(--wash); cursor: zoom-in; display: block; width: 100%; }
-.masonry img { width: 100%; display: block; }
-.masonry figcaption { font-size: 13px; color: var(--ink-soft); padding-top: 6px; }
 
 /* Lightbox */
 .lightbox { position: fixed; inset: 0; z-index: 100; background: rgba(252, 251, 249, .97); display: grid; grid-template-rows: auto 1fr auto; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
