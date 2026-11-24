@@ -1251,13 +1251,13 @@ def main():
     built = []
     rooms_title = f"{sum(r['units'] for r in ROOMS)} rooms"
     built.append(page("index.html", "Sapphire Stayss | Garden Resort in Yelagiri Hills with Breakfast",
-                      f"Sapphire Stayss is a quiet garden resort with {rooms_title} in Mangalam, Yelagiri, Tamil Nadu. Air-conditioned rooms and a private villa from ₹2,350 a night, complimentary breakfast, free Wi-Fi and parking.",
+                      f"Sapphire Stayss is a quiet garden resort with {rooms_title} in Mangalam, Yelagiri, Tamil Nadu. Air-conditioned rooms and a private villa from {rupees(min(r['price'] for r in ROOMS))} a night, complimentary breakfast, free Wi-Fi and parking.",
                       home, "home"))
     built.append(page("about.html", "About Sapphire Stayss | Small Resort in Yelagiri",
                       "About Sapphire Stayss, a small, quiet resort at the foot of Swamymalai in Mangalam, Yelagiri, looked after personally by its hosts.",
                       about_page, "about", crumbs=[("About", "about.html")], image="home/evening-exterior"))
     built.append(page("rooms.html", "Rooms & Prices in Yelagiri | Sapphire Stayss",
-                      "Compare the six room types at Sapphire Stayss, Yelagiri: beds, guests, size, views and prices from ₹2,350 to ₹5,050 a night with breakfast.",
+                      f"Compare the six room types at Sapphire Stayss, Yelagiri: beds, guests, size, views and prices from {rupees(min(r['price'] for r in ROOMS))} to {rupees(max(r['price'] for r in ROOMS))} a night with breakfast.",
                       rooms_page, "rooms", jsonld=[room_jsonld(r) for r in ROOMS], crumbs=[("Rooms", "rooms.html")],
                       image=ROOMS[0]["photos"][0][0]))
     for r in ROOMS:
