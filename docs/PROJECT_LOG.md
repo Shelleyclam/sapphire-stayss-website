@@ -93,7 +93,7 @@ Yelagiri (Tamil Nadu), plus a plan for direct online booking that stays in sync 
 1. **Channel manager:** book demos with AxisRooms and eZee, compare quotes, and choose one so availability syncs with Booking.com and Agoda.
 2. **Online booking and payments:** connect Razorpay (UPI and cards) to the booking engine, take a 50% advance, then switch the site's Book buttons from the enquiry form to the live booking page.
 3. **Razorpay account:** apply once the site is live (needs PAN, bank details and the legal pages above).
-4. **Go-live on sapphirestayss.in:** fix the GoDaddy renewal payment, check where the domain's DNS points, back up the old site and upload the new one to cPanel.
+4. **Go-live on sapphirestayss.in: done 24 November 2026.** The site is on the GoDaddy cPanel hosting behind Cloudflare. Every change is uploaded automatically over FTPS by a GitHub Actions workflow, and old page addresses redirect to the new ones. Still to do: fix the GoDaddy renewal payment.
 5. **Photos:** replace WhatsApp-compressed photos with full-quality originals, including a daytime exterior shot and a photo of the Swamymalai trek.
 6. **About page:** add the owner's own story, the hosts' names, the year hosting started and a photo (the last TODOs on the site).
 7. **Weekday and weekend pricing:** set different weekend and holiday rates in the channel manager.
