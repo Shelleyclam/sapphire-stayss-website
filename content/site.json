@@ -136,16 +136,16 @@
       ],
       "photos": [
         [
-          "rooms/deluxe-family-suite-1",
-          "Family Suite bed with grey headboard and patterned wall"
-        ],
-        [
           "rooms/deluxe-family-suite-8",
           "Sitting room with a brown leather sofa set, coffee table and rug"
         ],
         [
-          "rooms/deluxe-family-suite-2",
-          "Family Suite bed beside tall curtained windows"
+          "rooms/deluxe-family-suite-7",
+          "Family Suite showing two beds side by side"
+        ],
+        [
+          "rooms/deluxe-family-suite-6",
+          "Family Suite second bed beside the wardrobe"
         ],
         [
           "rooms/deluxe-family-suite-9",
@@ -158,14 +158,6 @@
         [
           "rooms/deluxe-family-suite-4",
           "Family Suite bed with bedside table"
-        ],
-        [
-          "rooms/deluxe-family-suite-6",
-          "Family Suite second bed beside the wardrobe"
-        ],
-        [
-          "rooms/deluxe-family-suite-7",
-          "Family Suite showing two beds side by side"
         ]
       ]
     },
