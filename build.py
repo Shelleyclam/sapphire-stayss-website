@@ -415,9 +415,9 @@ def home(p):
     </div>
     <figure class="hero-photo">
       <picture>
-        <source media="(max-width: 920px)" srcset="{p}img/home/hero-swamymalai-m.webp">
-        <source media="(max-width: 1100px)" srcset="{p}img/home/hero-swamymalai-sm.webp 1000w, {p}img/home/hero-swamymalai.webp 1600w" sizes="100vw">
-        <img src="{p}img/home/hero-swamymalai.webp" alt="Forested hills and the plains below, seen from the top of Swamymalai" width="1600" height="685" fetchpriority="high">
+        <source media="(max-width: 920px)" srcset="{p}img/home/hero-swamymalai-m.webp?v={version('img/home/hero-swamymalai-m.webp')}">
+        <source media="(max-width: 1100px)" srcset="{p}img/home/hero-swamymalai-sm.webp?v={version('img/home/hero-swamymalai-sm.webp')} 1000w, {p}img/home/hero-swamymalai.webp?v={version('img/home/hero-swamymalai.webp')} 1916w" sizes="100vw">
+        <img src="{p}img/home/hero-swamymalai.webp?v={version('img/home/hero-swamymalai.webp')}" alt="Forested hills and the plains below, seen from the top of Swamymalai" width="1916" height="821" fetchpriority="high">
       </picture>
       <figcaption>The view from Swamymalai, whose trek starts 100 m from our gate</figcaption>
     </figure>
