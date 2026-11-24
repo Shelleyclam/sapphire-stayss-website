@@ -804,18 +804,18 @@ def about_page(p):
   <p>{e(ABOUT_SHORT)}</p>
 </section>
 <section class="wrap section">
+  <div class="prose">
+    <h2>Our story</h2>
+    {story}
+  </div>
+</section>
+<section class="wrap section tight-top">
   <dl class="policy-grid">
     {hosts}
     <div><dt>Hosting since</dt><dd>{since}</dd></div>
     <div><dt>Rooms</dt><dd>{sum(r['units'] for r in ROOMS)} rooms, including a private villa</dd></div>
     <div><dt>Where</dt><dd>Mangalam, Yelagiri, at the foot of Swamymalai</dd></div>
   </dl>
-</section>
-<section class="wrap section tight-top">
-  <div class="prose">
-    <h2>Our story</h2>
-    {story}
-  </div>
 </section>
 <section class="wrap section">
   <div class="about-band">
