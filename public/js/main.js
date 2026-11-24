@@ -36,7 +36,7 @@
 
   // Date pairs: sensible defaults, and check-out always after check-in
   function setupDates(inEl, outEl, fromIn, fromOut) {
-    var start = new Date(); start.setDate(start.getDate() + 7);
+    var start = new Date();
     var end = new Date(start); end.setDate(end.getDate() + 1);
     inEl.value = fromIn || iso(start);
     outEl.value = fromOut || iso(end);
