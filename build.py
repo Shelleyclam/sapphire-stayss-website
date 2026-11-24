@@ -325,6 +325,7 @@ def hotel_jsonld():
                         " rooms in Mangalam, Yelagiri Hills, Tamil Nadu, at the foot of Swamymalai. "
                         "Air-conditioned rooms and a private villa, complimentary South Indian breakfast, free Wi-Fi and parking."),
         "slogan": B["tagline"],
+        **({"foundingDate": B["about"]["since"]} if B["about"]["since"] else {}),
         "url": B["site_url"] + "/",
         "image": [B["site_url"] + "/img/home/hero-swamymalai.webp", B["site_url"] + "/img/home/evening-exterior.webp"],
         "logo": B["site_url"] + "/img/logo.png",
@@ -793,9 +794,10 @@ ABOUT_SHORT = ("Sapphire Stayss is a small, quiet stay at the foot of Swamymalai
 def about_page(p):
     rv = DATA["reviews"][min(4, len(DATA["reviews"]) - 1)]  # home shows reviews 0-3
     A = B["about"]
-    run_by = e(A["run_by"]) if A["run_by"] else todo("who runs Sapphire Stayss (the hosts' names)")
+    hosts = f'<div><dt>Hosts</dt><dd>{e(A["run_by"])}</dd></div>' if A["run_by"] else ""
     since = e(A["since"]) if A["since"] else todo("the year you started hosting guests")
-    story = f"<p>{e(A['story'])}</p>" if A["story"] else f"<p>{todo('two or three lines in your own words: why you started Sapphire Stayss and what makes it different')}</p>"
+    paras = A["story"] if isinstance(A["story"], list) else [A["story"]] if A["story"] else []
+    story = "".join(f"<p>{e(x)}</p>" for x in paras) or f"<p>{todo('two or three lines in your own words: why you started Sapphire Stayss and what makes it different')}</p>"
     return f"""<section class="wrap page-head">
   <span class="label">About us</span>
   <h1>About Sapphire Stayss</h1>
@@ -803,7 +805,7 @@ def about_page(p):
 </section>
 <section class="wrap section">
   <dl class="policy-grid">
-    <div><dt>Hosts</dt><dd>{run_by}</dd></div>
+    {hosts}
     <div><dt>Hosting since</dt><dd>{since}</dd></div>
     <div><dt>Rooms</dt><dd>{sum(r['units'] for r in ROOMS)} rooms, including a private villa</dd></div>
     <div><dt>Where</dt><dd>Mangalam, Yelagiri, at the foot of Swamymalai</dd></div>

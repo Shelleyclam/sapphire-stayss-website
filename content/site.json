@@ -45,8 +45,12 @@
     "year": 2026,
     "about": {
       "run_by": "",
-      "since": "",
-      "story": ""
+      "since": "2022",
+      "story": [
+        "Sapphire Stayss began in 2022 as a small cottage homestay beneath the Yelagiri hills. Guests came for the quiet and the views, and many came back. Since then that little homestay has grown into a resort, without losing the peace and calm it started with.",
+        "Far from the hustle and bustle of city life, Sapphire Stayss is a retreat beneath a picturesque mountain landscape. Cradled at the foot of Swamymalai, it is a serene place to escape the ordinary, disconnect, unwind and rejuvenate your spirit.",
+        "Here the quiet of the mountains blends with warm hospitality to make every stay memorable. Whether you are planning a romantic getaway, a family retreat or a solo adventure, Sapphire Stayss is the perfect backdrop for memories you will cherish."
+      ]
     },
     "booking_com_url": "https://www.booking.com/hotel/in/sapphire-stayss.html"
   },
