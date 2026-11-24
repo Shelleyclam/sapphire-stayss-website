@@ -126,24 +126,30 @@
       "children": 2,
       "price": 5050,
       "views": "Garden and courtyard views",
-      "summary": "Our largest room, with two beds, tall windows and a portico, made for families who want space to spread out.",
+      "summary": "A suite with its own sitting room, with a three-seater sofa, two armchairs and a TV, opening into a bedroom with two beds. Space for the whole family to relax together.",
       "features": [
-        "Portico",
+        "Separate sitting room",
+        "Sofa set and TV",
         "Two beds",
+        "Portico",
         "Garden and courtyard views"
       ],
       "photos": [
-        [
-          "rooms/deluxe-family-suite-5",
-          "Family Suite with both beds and curtains"
-        ],
         [
           "rooms/deluxe-family-suite-1",
           "Family Suite bed with grey headboard and patterned wall"
         ],
         [
+          "rooms/deluxe-family-suite-8",
+          "Sitting room with a brown leather sofa set, coffee table and rug"
+        ],
+        [
           "rooms/deluxe-family-suite-2",
           "Family Suite bed beside tall curtained windows"
+        ],
+        [
+          "rooms/deluxe-family-suite-9",
+          "Sitting area with TV, kettle and cabinet, and the door to the bedroom"
         ],
         [
           "rooms/deluxe-family-suite-3",
@@ -529,8 +535,8 @@
     ],
     [
       "rooms",
-      "rooms/deluxe-family-suite-5",
-      "Deluxe Family Suite"
+      "rooms/deluxe-family-suite-8",
+      "Deluxe Family Suite sitting room"
     ],
     [
       "rooms",
