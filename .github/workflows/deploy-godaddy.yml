@@ -1,6 +1,7 @@
 # Uploads public/ to the GoDaddy cPanel hosting (sapphirestayss.in) on every push.
 # Needs three repository secrets, added in GitHub: Settings > Secrets and variables > Actions:
-#   FTP_SERVER    e.g. ftp.sapphirestayss.in (shown in cPanel > FTP Accounts > Configure FTP Client)
+#   FTP_SERVER    the server hostname, sg2plzcpnl508259.prod.sin2.secureserver.net (ftp.sapphirestayss.in
+#                 does not resolve because the domain's DNS is on Cloudflare)
 #   FTP_USERNAME  the FTP account's full login, e.g. deploy@sapphirestayss.in
 #   FTP_PASSWORD  that account's password
 # Create the FTP account with its directory set to public_html, so uploads land in the site root.
