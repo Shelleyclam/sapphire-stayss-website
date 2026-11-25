@@ -247,7 +247,7 @@ def page(path, title, description, content, current="", jsonld=None, crumbs=None
 <meta property="og:description" content="{e(description)}">
 <meta property="og:url" content="{canonical}">
 <meta property="og:image" content="{B['site_url']}/img/{image}.webp">
-<meta name="theme-color" content="#FCFBF9">
+<meta name="theme-color" content="#FCFBF9">{f'\n<meta name="google-site-verification" content="{e(B["google_site_verification"])}">' if B.get("google_site_verification") else ""}
 <link rel="icon" type="image/png" href="{p}img/favicon.png">
 <link rel="apple-touch-icon" href="{p}img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
