@@ -24,6 +24,18 @@
     return d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
   }
 
+  // Google Analytics events for leads (used as Google Ads conversions)
+  function track(name, params) {
+    if (typeof window.gtag === 'function') window.gtag('event', name, Object.assign({ transport_type: 'beacon' }, params || {}));
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a) return;
+    var href = a.getAttribute('href');
+    if (href.indexOf('https://wa.me/') === 0) track('generate_lead', { method: 'whatsapp' });
+    else if (href.indexOf('tel:') === 0) track('generate_lead', { method: 'phone' });
+  });
+
   // Mobile menu
   var menuBtn = document.getElementById('menu-btn');
   var nav = document.getElementById('site-nav');
@@ -162,6 +174,7 @@
       ];
       if (f.phone.value) lines.splice(2, 0, 'Phone: ' + f.phone.value);
       if (f.message.value) lines.push('', f.message.value);
+      track('generate_lead', { method: 'enquiry_form' });
       window.open(whatsappLink(lines.join('\n')), '_blank', 'noopener');
     });
   }

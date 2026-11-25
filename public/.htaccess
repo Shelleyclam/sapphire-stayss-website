@@ -25,6 +25,7 @@ Redirect 301 "/html pages/room4.html" https://sapphirestayss.in/rooms/double-roo
 Redirect 301 "/html pages/room5.html" https://sapphirestayss.in/rooms/double-or-twin-room.html
 Redirect 301 "/html pages/room6.html" https://sapphirestayss.in/rooms/king-room-mountain-view.html
 Redirect 301 /policies.html https://sapphirestayss.in/faq.html
+Redirect 301 /Contact.html https://sapphirestayss.in/contact.html
 
 <IfModule mod_expires.c>
   ExpiresActive On
