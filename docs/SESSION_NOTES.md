@@ -8,6 +8,7 @@ and what is planned is in `docs/PROJECT_LOG.md`. Facts about the business live i
 - **Live:** https://sapphirestayss.in is on GoDaddy cPanel hosting, behind Cloudflare. Went live on 24 November 2026.
 - **Preview:** https://shelleyclam.github.io/sapphire-stayss-website/ (GitHub Pages; canonical tags point to the live domain).
 - **Repo:** github.com/Shelleyclam/sapphire-stayss-website. It is public. The default and working branch is `new-website`.
+- **Google Analytics:** tag G-V32SGMJZLN on every page (`business.google_analytics_id`), linked for Google Ads. The privacy page mentions it.
 - **Google Search Console:** verified with the HTML tag (in `business.google_site_verification`). `sitemap.xml` was submitted: Success, 18 pages. Indexing was requested for the home page and the key pages.
 
 ## How changes go live
